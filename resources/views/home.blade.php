@@ -26,7 +26,7 @@
         <h3 class="font-bold text-lg p-4 border-b">Catégories</h3>
 <div class="p-2 overflow-y-auto scrollbar-hide hover:scrollbar-default" style="height: calc(350px - 60px);">
     @foreach($categories->take(10) as $category)
-        <a href="{{ route('category.show', $category->id) }}" 
+        <a href="{{ route('category.show', $category->slug) }}" 
            class="flex items-center space-x-3 py-3   px-2 hover:bg-gray-50 rounded transition {{ !$loop->last ? 'border-b' : '' }}">
             <img src="{{ asset('storage/' . $category->image) }}" 
                  alt="{{ $category->nom }}"
@@ -98,7 +98,7 @@
     </div>
     <div class="grid grid-cols-6 gap-4">
         @foreach($categories as $category)
-            <a href="{{ route('category.show', $category->id) }}" 
+            <a href="{{ route('category.show', $category->slug) }}" 
                class="flex flex-col items-center hover:opacity-80 transition">
                 <div class="w-full h-28 rounded-2xl overflow-hidden mb-2">
                     <img src="{{ asset('storage/' . $category->image) }}" 
@@ -141,7 +141,7 @@
     <div class="bg-white rounded-lg shadow-sm p-6">
         <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
             @foreach($products as $product)
-                <a href="{{ route('product.show', $product->id) }}" class="group hover:shadow-md transition rounded-lg p-2 hover:bg-gray-50">
+                <a href="{{ route('product.show', $product->slug) }}" class="group hover:shadow-md transition rounded-lg p-2 hover:bg-gray-50">
 <div class="relative w-full h-44 rounded-2xl overflow-hidden mb-2">
     <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" 
          alt="{{ $product->nom }}" 
@@ -209,7 +209,7 @@
     </div>
     <div class="grid grid-cols-3 gap-4">
         @foreach($categories as $category)
-            <a href="{{ route('category.show', $category->id) }}" 
+            <a href="{{ route('category.show', $category->slug) }}" 
                class="flex flex-col items-center hover:opacity-80 transition">
                 <div class="w-full h-20 rounded-2xl overflow-hidden mb-2">
                     <img src="{{ asset('storage/' . $category->image) }}" 
@@ -251,7 +251,7 @@
     <div class="bg-white rounded-b-lg shadow-sm p-2">
         <div class="grid grid-cols-2 gap-2">
             @foreach($products as $product)
-                <a href="{{ route('product.show', $product->id) }}" class="group bg-gray-50 rounded-lg p-2 hover:shadow transition">
+                <a href="{{ route('product.show', $product->slug) }}" class="group bg-gray-50 rounded-lg p-2 hover:shadow transition">
 <div class="relative w-full h-44 rounded-2xl overflow-hidden mb-2">
     <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" 
          alt="{{ $product->nom }}" 

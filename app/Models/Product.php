@@ -9,6 +9,7 @@ class Product extends Model
     protected $fillable = [
         'category_id',
         'nom',
+        'slug',
         'description',
         'prix',
         'prix_barre',
@@ -16,6 +17,42 @@ class Product extends Model
         'stock',
         'boutique_officielle',
     ];
+
+
+        protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($product) {
+            $product->slug = $product->generateUniqueSlug($product->nom);
+        });
+        
+        static::updating(function ($product) {
+            if ($product->isDirty('nom')) {
+                $product->slug = $product->generateUniqueSlug($product->nom);
+            }
+        });
+    }
+
+    public function generateUniqueSlug($name)
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $count = 1;
+        
+        while (static::where('slug', $slug)->where('id', '!=', $this->id)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+        
+        return $slug;
+    }
+
+    // Route binding par slug
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     protected $casts = [
         'boutique_officielle' => 'boolean',

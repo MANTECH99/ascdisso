@@ -39,10 +39,34 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 // Catégories
-Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.show');
+// Redirection 301 des anciennes URLs catégories (ID) vers les nouvelles (slug)
+Route::get('/category/{id}', function ($id) {
+    $category = App\Models\Category::find($id);
+    
+    if (!$category) {
+        abort(404);
+    }
+    
+    return redirect()->route('category.show', $category->slug, 301);
+})->where('id', '[0-9]+');
+
+// Route normale avec slug
+Route::get('/category/{category:slug}', [CategoryController::class, 'show'])->name('category.show');
 
 // Produits
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+// Redirection 301 des anciennes URLs (ID) vers les nouvelles (slug)
+Route::get('/product/{id}', function ($id) {
+    $product = App\Models\Product::find($id);
+    
+    if (!$product) {
+        abort(404);
+    }
+    
+    return redirect()->route('product.show', $product->slug, 301);
+})->where('id', '[0-9]+');
+
+// Route normale avec slug
+Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 
 // Avis (authentifié)
 Route::post('/avis', [ProductController::class, 'storeAvis'])->name('avis.store')->middleware('auth');

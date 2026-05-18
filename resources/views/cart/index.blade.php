@@ -27,7 +27,7 @@
     class="w-16 h-16 object-contain rounded">
                             </td>
                             <td class="px-6 py-4">
-                                <a href="{{ route('product.show', $item['product']->id) }}" class="hover:text-primary-red">
+                                <a href="{{ route('product.show', $item['product']->slug) }}" class="hover:text-primary-red">
                                     {{ $item['product']->nom }}
                                 </a>
                             </td>
@@ -90,7 +90,7 @@
                         
                         <!-- Infos produit -->
                         <div class="flex-1">
-                            <a href="{{ route('product.show', $item['product']->id) }}" 
+                            <a href="{{ route('product.show', $item['product']->slug) }}" 
                                class="font-medium text-sm line-clamp-2 hover:text-primary-red">
                                 {{ $item['product']->nom }}
                             </a>

@@ -11,7 +11,7 @@
         <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
             @foreach($products as $product)
 <div class="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition">
-    <a href="{{ route('product.show', $product->id) }}">
+    <a href="{{ route('product.show', $product->slug) }}">
         <div class="relative w-full h-44 rounded-2xl overflow-hidden mb-2">
             <img src="{{ $product->first_image_url }}" 
                  alt="{{ $product->nom }}" 

@@ -307,7 +307,7 @@ $productSchema = [
                 <h2 class="text-xl font-bold mb-4 px-4 py-2 inline-block w-full" style="background-color: #D3D4D2;">Produits similaires</h2>
                 <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mt-4">
                     @foreach($relatedProducts as $related)
-                        <a href="{{ route('product.show', $related->id) }}" 
+                        <a href="{{ route('product.show', $related->slug) }}"
                            class="group bg-white border rounded-lg overflow-hidden hover:shadow-md transition">
 <div class="relative w-full h-44 overflow-hidden">
     <img src="{{ $related->first_image_url }}" 

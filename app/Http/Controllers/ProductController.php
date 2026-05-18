@@ -8,18 +8,20 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function show($id)
-    {
-        $product = Product::with(['images', 'category'])->findOrFail($id);
-        $avis = $product->avis()->with('user')->latest()->paginate(10);
-        $relatedProducts = Product::where('category_id', $product->category_id)
-            ->where('id', '!=', $product->id)
-            ->where('stock', '>', 0)
-            ->take(6)
-            ->get();
+public function show(Product $product)
+{
+    // $product est déjà trouvé par le slug grâce à getRouteKeyName()
+    $product->load(['images', 'category']);
+    
+    $avis = $product->avis()->with('user')->latest()->paginate(10);
+    $relatedProducts = Product::where('category_id', $product->category_id)
+        ->where('id', '!=', $product->id)
+        ->where('stock', '>', 0)
+        ->take(6)
+        ->get();
 
-        return view('product.show', compact('product', 'avis', 'relatedProducts'));
-    }
+    return view('product.show', compact('product', 'avis', 'relatedProducts'));
+}
 
     public function storeAvis(Request $request)
     {

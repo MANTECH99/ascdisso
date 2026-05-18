@@ -14,7 +14,7 @@
         <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
             @forelse($products as $product)
                 <div class="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition">
-                    <a href="{{ route('product.show', $product->id) }}">
+                    <a href="{{ route('product.show', $product->slug) }}">
                         <img src="{{ $product->first_image_url }}" 
                              alt="{{ $product->nom }}" 
                              class="w-full h-40 object-cover">
