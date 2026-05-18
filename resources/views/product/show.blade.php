@@ -43,15 +43,15 @@ $productSchema = [
 {!! json_encode($productSchema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
 </script>
 <div class="max-w-7xl mx-auto px-4 py-6">
-    <!-- Fil d'Ariane (Breadcrumb) -->
-<nav class="flex items-center space-x-2 text-sm text-gray-500 mb-4">
-    <a href="{{ route('home') }}" class="hover:text-primary-red transition">Accueil</a>
-    <span>›</span>
+<!-- Fil d'Ariane (Breadcrumb) avec défilement horizontal masqué -->
+<nav class="flex items-center space-x-2 text-sm text-gray-500 mb-4 overflow-x-auto scrollbar-hide whitespace-nowrap">
+    <a href="{{ route('home') }}" class="hover:text-primary-red transition flex-shrink-0">Accueil</a>
+    <span class="flex-shrink-0">›</span>
     @if($product->category)
-        <a href="{{ route('category.show', $product->category->id) }}" class="hover:text-primary-red transition">{{ $product->category->nom }}</a>
-        <span>›</span>
+        <a href="{{ route('category.show', $product->category->slug) }}" class="hover:text-primary-red transition flex-shrink-0">{{ $product->category->nom }}</a>
+        <span class="flex-shrink-0">›</span>
     @endif
-    <span class="text-gray-800 font-medium truncate">{{ $product->nom }}</span>
+    <span class="text-gray-800 font-medium flex-shrink-0">{{ $product->nom }}</span>
 </nav>
     <div class="bg-white rounded-lg shadow-sm p-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -493,6 +493,13 @@ function goToSlide(index) {
     width: auto !important;
     height: auto !important;
     object-fit: contain !important;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 </style>
 @endsection

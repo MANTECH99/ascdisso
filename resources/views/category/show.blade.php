@@ -6,7 +6,7 @@
 @section('canonical_url', route('category.show', $category->id))
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
+<div class="container max-w-7xl mx-auto px-4 py-6">
     <div class="bg-white rounded-lg shadow-sm p-6">
         <h1 class="text-2xl font-bold mb-2">{{ $category->nom }}</h1>
         <p class="text-gray-600 mb-6">{{ $products->total() }} produit(s) trouvé(s)</p>
@@ -16,8 +16,8 @@
                 <div class="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition">
                     <a href="{{ route('product.show', $product->slug) }}">
                         <img src="{{ $product->first_image_url }}" 
-                             alt="{{ $product->nom }}" 
-                             class="w-full h-40 object-cover">
+                        alt="{{ $product->nom }}" 
+                        class="w-full h-40 object-contain bg-white p-2">
                         <div class="p-3">
                             <span class="text-xs bg-red-100 text-primary-red px-2 py-1 rounded">Boutique officiel</span>
                             <h3 class="font-medium text-sm mt-2 truncate">{{ $product->nom }}</h3>
