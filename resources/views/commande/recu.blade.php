@@ -84,7 +84,7 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-gray-600 text-sm">Livraison</span>
-                        <span class="font-medium text-sm text-green-600">Incluse</span>
+                        <span class="font-medium text-sm text-green-600">Gratuite</span>
                     </div>
                     <div class="flex justify-between items-center pt-2 border-t border-gray-200">
                         <span class="font-bold text-gray-800">Total</span>
