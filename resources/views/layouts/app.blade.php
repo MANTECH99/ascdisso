@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
     <meta charset="UTF-8">
+    <!-- À ajouter juste après <meta charset="UTF-8"> -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+        <!-- Theme Color pour mobile -->
+    <meta name="theme-color" content="#ff6b00">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ASC Disso">
     
     <!-- SEO -->
     <title>@yield('title', 'ASC Disso - Boutique Officielle au Sénégal')</title>
@@ -16,10 +21,13 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="@yield('canonical_url', url()->current())">
     
-    <!-- Open Graph -->
+    <!-- Open Graph / Facebook -->
     <meta property="og:title" content="@yield('og_title', 'ASC Disso - Boutique Officielle')">
     <meta property="og:description" content="@yield('og_description', 'Votre boutique en ligne de confiance au Sénégal')">
     <meta property="og:image" content="@yield('og_image', asset('images/logo.png'))">
+    <meta property="og:image:width" content="112">      <!-- 👈 AJOUTÉ -->
+    <meta property="og:image:height" content="112">     <!-- 👈 AJOUTÉ -->
+    <meta property="og:image:alt" content="Logo ASC Disso - Boutique Officielle"> <!-- 👈 AJOUTÉ -->
     <meta property="og:url" content="@yield('og_url', url()->current())">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ASC Disso">
@@ -29,9 +37,20 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('twitter_title', 'ASC Disso - Boutique Officielle')">
     <meta name="twitter:description" content="@yield('twitter_description', 'Votre boutique en ligne de confiance au Sénégal')">
-    <meta name="twitter:image" content="@yield('twitter_image', asset('images/logo.png'))">
+    <meta name="twitter:image" content="@yield('twitter_image', asset('images/logo.png'))"> <!-- 👈 AJOUTÉ -->
     
-<script type="application/ld+json">
+    <!-- Favicons COMPLETS 👈 NOUVEAU -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}"> <!-- 👈 AJOUTÉ -->
+    
+    <!-- Fallback -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json">
     @php
     $schema = [
         '@context' => 'https://schema.org',
@@ -47,10 +66,11 @@
     ];
     @endphp
     {!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
-</script>
+    </script>
+    
+    <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <style>
         :root {
             --primary-dark: #4D1111;

@@ -1,0 +1,23 @@
+{
+  "name": "ASC Disso",
+  "short_name": "ASC Disso",
+  "description": "Boutique officielle au Sénégal",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ff6b00",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/",
+  "lang": "fr",
+  "scope": "/"
+}
