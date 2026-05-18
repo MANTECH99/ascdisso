@@ -3,4 +3,5 @@ Allow: /
 Disallow: /admin
 Disallow: /cart
 Disallow: /checkout
-Sitemap: https://app.billeteriexpress.com/sitemap.xml
+Disallow: /search
+Sitemap: https://ascdisso.com/sitemap.xml
