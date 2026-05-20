@@ -39,7 +39,7 @@ class CommandeController extends Controller
             Notification::create([
                 'user_id' => $commande->user_id,
                 'commande_id' => $commande->id,
-                'message' => '✅ Votre commande #' . $commande->id . ' a été validée ! Montant : ' . number_format($commande->total, 0) . ' FCFA',
+                'message' => 'Votre commande #' . $commande->id . ' a été validée ! Montant : ' . number_format($commande->total, 0) . ' FCFA',
             ]);
         }
 
@@ -55,7 +55,7 @@ class CommandeController extends Controller
             Notification::create([
                 'user_id' => $commande->user_id,
                 'commande_id' => $commande->id,
-                'message' => '🚚 Votre commande #' . $commande->id . ' est en cours de livraison !',
+                'message' => 'Votre commande #' . $commande->id . ' est en cours de livraison !',
             ]);
         }
 
@@ -71,7 +71,7 @@ class CommandeController extends Controller
             Notification::create([
                 'user_id' => $commande->user_id,
                 'commande_id' => $commande->id,
-                'message' => '❌ Votre commande #' . $commande->id . ' a été annulée. Contactez le service client.',
+                'message' => 'Votre commande #' . $commande->id . ' a été annulée. Contactez le service client.',
             ]);
         }
 

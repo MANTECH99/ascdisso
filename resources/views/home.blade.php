@@ -114,7 +114,7 @@
 <!-- Bannière Promo Desktop -->
 <div class="mb-8">
     <div class="w-full rounded-lg overflow-hidden shadow-sm">
-        <img src="{{ asset('images/ma.png') }}" 
+        <img src="{{ asset('images/aa.png') }}" 
              alt="Bannière promotionnelle" 
              class="w-full h-auto object-cover">
     </div>
@@ -142,7 +142,7 @@
         <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
             @foreach($products as $product)
                 <a href="{{ route('product.show', $product->slug) }}" class="group hover:shadow-md transition rounded-lg p-2 hover:bg-gray-50">
-<div class="relative w-full h-44 rounded-2xl overflow-hidden mb-2">
+<div class="relative w-full h-44 rounded-2xl bg-gray-100 overflow-hidden mb-2">
     <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" 
          alt="{{ $product->nom }}" 
          class="w-full h-full object-contain group-hover:scale-105 transition duration-300">
@@ -153,8 +153,34 @@
     @endif
 </div>
                     <div>
-                        <span class="text-xs bg-red-100 text-primary-red px-2 py-1 rounded">Boutique officiel</span>
+                        
                         <h3 class=" text-sm mt-2 truncate">{{ $product->nom }}</h3>
+                                        <!-- Notes des avis -->
+                <div class="mt-3 flex items-center space-x-2">
+                    <div class="flex text-yellow-400">
+                        @for($i = 1; $i <= 5; $i++)
+                            @if($i <= round($product->average_rating))
+                                ★
+                            @else
+                                ☆
+                            @endif
+                        @endfor
+                    </div>
+                    <span class="text-sm text-gray-600">({{ $product->avis->count() }} avis)</span>
+                </div>
+                                <!-- Stock -->
+                <div class="mt-2">
+                    @if($product->stock > 0)
+<span class="text-green-600 text-sm flex items-center gap-1">
+  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+  </svg>
+  En stock
+</span>
+                    @else
+                        <span class="text-red-600 text-sm">❌ Rupture de stock</span>
+                    @endif
+                </div>
                         <div class="mt-2">
                             <span class="font-bold text-lg">{{ number_format($product->prix, 0, ',', ' ') }} FCFA</span>
                             @if($product->prix_barre)
@@ -225,7 +251,7 @@
 <!-- Bannière Promo Mobile -->
 <div class="mt-8">
     <div class="w-full rounded-lg overflow-hidden shadow-sm">
-        <img src="{{ asset('images/ma.png') }}" 
+        <img src="{{ asset('images/aa.png') }}" 
              alt="Bannière promotionnelle" 
              class="w-full h-auto object-cover">
     </div>
@@ -251,8 +277,8 @@
     <div class="bg-white rounded-b-lg shadow-sm p-2">
         <div class="grid grid-cols-2 gap-2">
             @foreach($products as $product)
-                <a href="{{ route('product.show', $product->slug) }}" class="group bg-gray-50 rounded-lg p-2 hover:shadow transition">
-<div class="relative w-full h-44 rounded-2xl overflow-hidden mb-2">
+                <a href="{{ route('product.show', $product->slug) }}" class="group  rounded-lg p-2 hover:shadow transition">
+<div class="relative w-full h-44 rounded-2xl bg-gray-100 overflow-hidden mb-2">
     <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" 
          alt="{{ $product->nom }}" 
          class="w-full h-full object-contain group-hover:scale-105 transition duration-300">
@@ -263,8 +289,34 @@
     @endif
 </div>
                     <div>
-                        <span class="text-xs bg-red-100 text-primary-red px-2 py-1 rounded">Boutique officiel</span>
+
                         <h3 class=" text-sm mt-2 truncate">{{ $product->nom }}</h3>
+                                                                <!-- Notes des avis -->
+                <div class="mt-2 flex items-center space-x-2">
+                    <div class="flex text-yellow-400">
+                        @for($i = 1; $i <= 5; $i++)
+                            @if($i <= round($product->average_rating))
+                                ★
+                            @else
+                                ☆
+                            @endif
+                        @endfor
+                    </div>
+                    <span class="text-sm text-gray-600">avis</span>
+                </div>
+                                <!-- Stock -->
+                <div class="mt-2">
+                    @if($product->stock > 0)
+<span class="text-green-600 text-sm flex items-center gap-1">
+  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+  </svg>
+  En stock
+</span>
+                    @else
+                        <span class="text-red-600 text-sm">❌ Rupture de stock</span>
+                    @endif
+                </div>
                         <div class="mt-2">
                             <span class="font-bold text-lg">{{ number_format($product->prix, 0, ',', ' ') }} FCFA</span>
                             @if($product->prix_barre)

@@ -2,7 +2,12 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold mb-6">Passer la commande</h1>
+    <div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-800 relative inline-block">
+        Passer la commande        
+        <span class="absolute left-0 -bottom-2 w-1/2 h-1 bg-primary-red rounded-full"></span>
+    </h1>
+</div>
     
     <form id="checkoutForm" action="{{ route('commande.store') }}" method="POST">
         @csrf

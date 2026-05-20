@@ -77,7 +77,10 @@
                            class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-500 focus:border-transparent" required>
                 </div>
                 
-                <button type="submit" class="w-full bg-red-500 text-white py-3 rounded-lg font-bold text-lg hover:bg-red-700 transition">
+                <button type="submit" class="w-full bg-primary-red text-white py-3 rounded-xl font-bold text-lg hover:bg-red-600 transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+    </svg>
                     Créer mon compte
                 </button>
             </form>
