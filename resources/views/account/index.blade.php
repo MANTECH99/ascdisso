@@ -3,7 +3,12 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 py-6">
     @auth
-        <h1 class="text-2xl font-bold mb-6">Mon compte</h1>
+            <div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-800 relative inline-block">
+Mon compte
+                <span class="absolute left-0 -bottom-2 w-1/2 h-1 bg-primary-red rounded-full"></span>
+    </h1>
+    </div>
         
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
