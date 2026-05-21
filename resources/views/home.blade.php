@@ -114,7 +114,7 @@
 <!-- Bannière Promo Desktop -->
 <div class="mb-8">
     <div class="w-full rounded-lg overflow-hidden shadow-sm">
-        <img src="{{ asset('images/aa.png') }}" 
+        <img src="{{ asset('images/test.png') }}" 
              alt="Bannière promotionnelle" 
              class="w-full h-auto object-cover">
     </div>
@@ -251,7 +251,7 @@
 <!-- Bannière Promo Mobile -->
 <div class="mt-8">
     <div class="w-full rounded-lg overflow-hidden shadow-sm">
-        <img src="{{ asset('images/aa.png') }}" 
+        <img src="{{ asset('images/test.png') }}" 
              alt="Bannière promotionnelle" 
              class="w-full h-auto object-cover">
     </div>
