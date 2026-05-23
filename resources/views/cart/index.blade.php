@@ -150,8 +150,11 @@ Mon Panier
             <!-- Boutons Mobile -->
             <div class="space-y-3">
                 <a href="{{ route('checkout') }}" 
-                   class="block w-full bg-red-500 text-white text-center py-3 rounded-lg font-bold text-lg hover:bg-red-700 transition">
+                   class="block w-full bg-primary-red text-white py-3 rounded-xl text-xl font-bold hover:bg-red-600 transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
                     Passer la commande
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16l4-4m0 0l-4-4m4 4H3m5 4v1a3 3 0 003 3h7a3 3 0 003-3V7a3 3 0 00-3-3h-7a3 3 0 00-3 3v1"/>
+</svg>
                 </a>
                 <a href="{{ route('home') }}" 
                    class="block w-full border border-gray-300 text-center py-3 rounded-lg hover:bg-gray-50 transition">
@@ -164,8 +167,11 @@ Mon Panier
             <div class="text-6xl mb-4">🛒</div>
             <h2 class="text-xl font-bold mb-2">Votre panier est vide</h2>
             <p class="text-gray-600 mb-6">Découvrez nos produits et ajoutez-les à votre panier</p>
-            <a href="{{ route('home') }}" class="btn-primary px-8 py-3 rounded-lg">
+            <a href="{{ route('home') }}" class="bg-primary-red text-white py-3 rounded-xl text-xl font-bold hover:bg-red-600 transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"">
                 Voir les produits
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16l4-4m0 0l-4-4m4 4H3m5 4v1a3 3 0 003 3h7a3 3 0 003-3V7a3 3 0 00-3-3h-7a3 3 0 00-3 3v1"/>
+</svg>
             </a>
         </div>
     @endif

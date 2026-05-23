@@ -87,8 +87,8 @@ $productSchema = [
             <!-- Infos produit -->
             <div>
                 <!-- Badge Boutique officielle -->
-                <span class="bg-red-100 text-primary-red px-3 py-1 rounded text-sm font-medium">
-                    ✅ Boutique officiel de l'ASC Disso
+                <span class="bg-blue-800 text-white px-3 py-1 rounded text-sm font-medium">
+                    Boutique officielle de l'ASC Disso
                 </span>
                 
                 <!-- Nom -->

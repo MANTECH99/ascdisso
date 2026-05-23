@@ -94,8 +94,11 @@
 </div>
                 
                 <!-- Bouton Mobile -->
-                <button type="submit" id="submitBtnMobile" class="md:hidden w-full bg-red-500 text-white py-4 rounded-lg text-lg font-bold hover:bg-red-700 transition">
+                <button type="submit" id="submitBtnMobile" class="md:hidden w-full bg-primary-red text-white py-3 rounded-xl text-xl font-bold hover:bg-red-600 transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
                     Passer la commande
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16l4-4m0 0l-4-4m4 4H3m5 4v1a3 3 0 003 3h7a3 3 0 003-3V7a3 3 0 00-3-3h-7a3 3 0 00-3 3v1"/>
+</svg>
                 </button>
             </div>
             
