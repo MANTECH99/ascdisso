@@ -47,28 +47,51 @@
                     </div>
                 </div>
                 
-                <!-- Paiement -->
-                <div class="bg-white rounded-lg shadow-sm p-4 md:p-6">
-                    <h2 class="text-lg md:text-xl font-bold mb-4">Mode de paiement</h2>
-                    
-                    <div class="space-y-3">
-                        <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition payment-option" data-method="livraison">
-                            <input type="radio" name="mode_paiement" value="livraison" checked class="mr-3 w-5 h-5 text-red-500">
-                            <div>
-                                <span class="font-medium">Paiement à la livraison</span>
-                                <p class="text-sm text-gray-500">Payez en espèces à la réception</p>
-                            </div>
-                        </label>
-                        
-                        <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition payment-option" data-method="wave">
-                            <input type="radio" name="mode_paiement" value="wave" class="mr-3 w-5 h-5 text-red-500">
-                            <div>
-                                <span class="font-medium">Paiement Wave</span>
-                                <p class="text-sm text-gray-500">Payez avec votre compte Wave</p>
-                            </div>
-                        </label>
-                    </div>
-                </div>
+<!-- Paiement -->
+<div class="bg-white rounded-lg shadow-sm p-4 md:p-6">
+    <h2 class="text-lg md:text-xl font-bold mb-4">Mode de paiement</h2>
+    
+    <div class="space-y-3">
+        <!-- Paiement à la livraison -->
+        <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition payment-option" data-method="livraison">
+            <input type="radio" name="mode_paiement" value="livraison" checked class="mr-3 w-5 h-5 text-red-500">
+            <div class="payment-method-icon" style=" width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                <img src="{{ asset('images/livr.png') }}" alt="Livraison" style="width: 35px; height: 35px; object-fit: contain;">
+            </div>
+            <div class="flex-1">
+                <span class="font-medium block">Paiement à la livraison</span>
+                <p class="text-sm text-gray-500">Payez en espèces</p>
+            </div>
+            <i class="fas fa-check-circle" style="font-size: 1.25rem; color: #e2e8f0;"></i>
+        </label>
+        
+        <!-- Wave Option -->
+        <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition payment-option" data-method="wave">
+            <input type="radio" name="mode_paiement" value="wave" class="mr-3 w-5 h-5 text-red-500">
+            <div class="payment-method-icon" style="background-color: #1DC8FF; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                <img src="{{ asset('images/waves.png') }}" alt="Wave" style="width: 35px; height: 35px; object-fit: contain;">
+            </div>
+            <div class="flex-1">
+                <span class="font-medium block">Paiement Wave</span>
+                <p class="text-sm text-gray-500">Payez avec Wave</p>
+            </div>
+            <i class="fas fa-check-circle" style="font-size: 1.25rem; color: #e2e8f0;"></i>
+        </label>
+
+        <!-- Orange Money Option -->
+        <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition payment-option" data-method="orange">
+            <input type="radio" name="mode_paiement" value="orange_money" class="mr-3 w-5 h-5 text-red-500">
+            <div class="payment-method-icon" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                <img src="{{ asset('images/orange.png') }}" alt="Orange Money" style="width: 35px; height: 35px; object-fit: contain;">
+            </div>
+            <div class="flex-1">
+                <span class="font-medium block">Orange Money</span>
+                <p class="text-sm text-gray-500">Paiement mobile sécurisé</p>
+            </div>
+            <i class="fas fa-check-circle" style="font-size: 1.25rem; color: #e2e8f0;"></i>
+        </label>
+    </div>
+</div>
                 
                 <!-- Bouton Mobile -->
                 <button type="submit" id="submitBtnMobile" class="md:hidden w-full bg-red-500 text-white py-4 rounded-lg text-lg font-bold hover:bg-red-700 transition">
@@ -193,6 +216,16 @@
 .wave-redirect-overlay.active {
     display: flex;
 }
+
+/* Payment option selection */
+.payment-option.selected {
+    border-color: #10b981 !important;
+    background-color: #f0fdf4 !important;
+}
+
+.payment-option.selected .fa-check-circle {
+    color: #10b981 !important;
+}
 </style>
 @endsection
 
@@ -206,12 +239,20 @@ document.addEventListener('DOMContentLoaded', function() {
         option.addEventListener('click', function() {
             document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
             this.classList.add('selected');
+
+                        // Cocher le radio button correspondant
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+            }
         });
     });
     
-    // Sélectionner celle par défaut
-    document.querySelector('.payment-option[data-method="livraison"]').classList.add('selected');
-    
+    // Sélectionner celle par défaut (livraison)
+    const defaultOption = document.querySelector('.payment-option[data-method="livraison"]');
+    if (defaultOption) {
+        defaultOption.classList.add('selected');
+    }
     // Gestion soumission
     form.addEventListener('submit', function(e) {
         const modePaiement = document.querySelector('input[name="mode_paiement"]:checked').value;
@@ -279,6 +320,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('waveOverlay').style.display = 'none';
                 alert('Erreur : ' + error.message);
             });
+        }
+                // Si paiement Orange Money
+        else if (modePaiement === 'orange_money') {
+            e.preventDefault();
+            alert('Orange Money sera bientôt disponible. Veuillez choisir un autre mode de paiement.');
         }
         // Si cash, soumission normale du formulaire
     });
