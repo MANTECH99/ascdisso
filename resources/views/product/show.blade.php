@@ -34,9 +34,74 @@ $productSchema = [
         'price' => (string) $product->prix,
         'priceValidUntil' => now()->addYear()->format('Y-m-d'),
         'availability' => $product->stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-        'itemCondition' => 'https://schema.org/NewCondition'
+        'itemCondition' => 'https://schema.org/NewCondition',
+        
+        // Informations de livraison
+        'shippingDetails' => [
+            '@type' => 'OfferShippingDetails',
+            'shippingRate' => [
+                '@type' => 'MonetaryAmount',
+                'value' => '0',
+                'currency' => 'XOF'
+            ],
+            'shippingDestination' => [
+                '@type' => 'DefinedRegion',
+                'addressCountry' => 'SN'
+            ],
+            'deliveryTime' => [
+                '@type' => 'ShippingDeliveryTime',
+                'handlingTime' => [
+                    '@type' => 'QuantitativeValue',
+                    'minValue' => 0,
+                    'maxValue' => 1,
+                    'unitCode' => 'DAY'
+                ],
+                'transitTime' => [
+                    '@type' => 'QuantitativeValue',
+                    'minValue' => 1,
+                    'maxValue' => 3,
+                    'unitCode' => 'DAY'
+                ]
+            ]
+        ],
+        
+        // Politique de retour
+        'hasMerchantReturnPolicy' => [
+            '@type' => 'MerchantReturnPolicy',
+            'returnPolicyCategory' => 'https://schema.org/MerchantReturnFiniteReturnWindow',
+            'merchantReturnDays' => 7,
+            'returnMethod' => 'https://schema.org/ReturnInStore',
+            'returnFees' => 'https://schema.org/FreeReturn'
+        ]
     ]
 ];
+
+// Ajout des notes et avis si le produit en a
+if ($product->avis->count() > 0) {
+    $productSchema['aggregateRating'] = [
+        '@type' => 'AggregateRating',
+        'ratingValue' => round($product->average_rating, 1),
+        'reviewCount' => $product->avis->count()
+    ];
+    
+    $productSchema['review'] = $product->avis->take(5)->map(function ($avi) {
+        return [
+            '@type' => 'Review',
+            'author' => [
+                '@type' => 'Person',
+                'name' => $avi->user->prenom . ' ' . $avi->user->nom
+            ],
+            'datePublished' => $avi->created_at->toIso8601String(),
+            'reviewBody' => $avi->commentaire ?? '',
+            'reviewRating' => [
+                '@type' => 'Rating',
+                'ratingValue' => $avi->note,
+                'bestRating' => 5,
+                'worstRating' => 1
+            ]
+        ];
+    })->values()->toArray();
+}
 @endphp
 
 <script type="application/ld+json">
