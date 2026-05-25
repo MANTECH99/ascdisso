@@ -68,6 +68,7 @@ $productSchema = [
         // Politique de retour
         'hasMerchantReturnPolicy' => [
             '@type' => 'MerchantReturnPolicy',
+            'applicableCountry' => 'SN',
             'returnPolicyCategory' => 'https://schema.org/MerchantReturnFiniteReturnWindow',
             'merchantReturnDays' => 7,
             'returnMethod' => 'https://schema.org/ReturnInStore',
