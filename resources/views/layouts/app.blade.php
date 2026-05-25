@@ -365,14 +365,14 @@
 
 <!-- Footer -->
 <footer class="bg-dark-bg text-white mt-12 hidden md:block">
-    <div class="container mx-auto px-4 py-8">
+    <div class="container max-w-7xl mx-auto px-4 py-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
                 <div class="flex items-center space-x-2 mb-4">
                     <img src="{{ asset('images/logo.png') }}" alt="ASC Disso" class="h-10 w-10">
                     <span class="text-xl font-bold text-primary-red">ASC Disso</span>
                 </div>
-                <p class="text-sm text-light-gray">Votre boutique en ligne de confiance au Sénégal</p>
+                <p class="text-sm text-light-gray">Votre boutique en ligne de confiance au Sénégal, située précisément à Mboro </p>
                 <div class="mt-4">
                     <p class="text-sm font-medium mb-3">Suivez-nous :</p>
                     <div class="flex items-center space-x-3">
