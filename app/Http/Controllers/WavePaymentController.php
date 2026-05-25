@@ -49,7 +49,11 @@ class WavePaymentController extends Controller
 
             Log::info('Wave Payment Request:', $payload);
 
-            $response = Http::withHeaders([
+            $response = Http::withOptions([
+                'curl' => [
+                    CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+                ],
+            ])->withHeaders([
                 'Authorization' => 'Bearer ' . $apiKey,
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
