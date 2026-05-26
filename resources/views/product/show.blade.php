@@ -9,7 +9,7 @@
 @section('og_title', $product->nom . ' - ' . number_format($product->prix, 0, ',', ' ') . ' FCFA | ASC Disso')
 @section('og_description', Str::limit(strip_tags($product->description), 160))
 @section('og_image', asset('storage/' . $product->images->first()->image_path))
-@section('og_url', route('product.show', $product->id))
+@section('canonical_url', route('product.show', $product->slug))
 @section('og_type', 'product')
 
 

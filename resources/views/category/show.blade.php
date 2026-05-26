@@ -3,7 +3,7 @@
 @section('title', $category->nom . ' - ASC Disso | Achat en ligne Sénégal')
 @section('meta_description', 'Découvrez notre sélection de ' . $category->nom . ' sur ASC Disso. Meilleurs prix, livraison rapide au Sénégal.')
 @section('meta_keywords', $category->nom . ', acheter ' . $category->nom . ' Sénégal, ' . $category->nom . ' Dakar, ' . $category->nom . ' pas cher')
-@section('canonical_url', route('category.show', $category->id))
+@section('canonical_url', route('category.show', $category->slug))
 
 @section('content')
 
