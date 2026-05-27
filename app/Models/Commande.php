@@ -55,4 +55,23 @@ class Commande extends Model
         ];
         return $badges[$this->statut] ?? 'bg-gray-100 text-gray-800';
     }
+
+public function getStatutPaiementBadgeAttribute()
+{
+    $badges = [
+        'non_paye' => 'bg-gray-100 text-gray-800',
+        'paye' => 'bg-green-100 text-green-800',
+    ];
+    return $badges[$this->statut_paiement] ?? 'bg-gray-100 text-gray-800';
+}
+
+    public function getModePaiementLabelAttribute()
+    {
+        $labels = [
+            'livraison' => 'Paiement à la livraison',
+            'wave' => 'Wave',
+            'orange_money' => 'Orange Money',
+        ];
+        return $labels[$this->mode_paiement] ?? $this->mode_paiement;
+    }
 }

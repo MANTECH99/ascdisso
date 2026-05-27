@@ -11,14 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Définir les alias (middleware avec nom)
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
 
-               // Exclure le callback Wave du CSRF
         $middleware->validateCsrfTokens(except: [
-            '/wave/callback',
+            'wave/callback',
+            'payment/callback',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

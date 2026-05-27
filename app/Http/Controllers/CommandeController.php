@@ -109,7 +109,7 @@ class CommandeController extends Controller
                     }
                 },
             ],
-            'mode_paiement' => 'required|in:livraison,wave',
+            'mode_paiement' => 'required|in:livraison,wave,orange_money',  // ← AJOUTEZ orange_money ici
         ]);
 
         $cart = $this->getCart();  // ← Plus de session()
@@ -176,7 +176,7 @@ class CommandeController extends Controller
         }
 
             // Si Wave, retourner JSON avec l'ID
-    if ($request->mode_paiement === 'wave' || $request->expectsJson()) {
+        if ($request->mode_paiement === 'wave' || $request->mode_paiement === 'orange_money' || $request->expectsJson()) {
         return response()->json([
             'success' => true,
             'commande_id' => $commande->id,
@@ -197,7 +197,8 @@ class CommandeController extends Controller
     public function recu($id)
     {
         $commande = Commande::with('commandeProducts.product')->findOrFail($id);
-        return view('commande.recu', compact('commande'));
+        $error = request()->query('error');
+        return view('commande.recu', compact('commande', 'error'));
     }
 
     public function messages()
@@ -219,16 +220,16 @@ class CommandeController extends Controller
     }
 
 
-    public function unreadCount()
-{
-    if (!Auth::check()) {
-        return response()->json(['count' => 0]);
-    }
-    
-    $count = Notification::where('user_id', Auth::id())
-        ->where('is_read', false)
-        ->count();
+        public function unreadCount()
+    {
+        if (!Auth::check()) {
+            return response()->json(['count' => 0]);
+        }
         
-    return response()->json(['count' => $count]);
-}
+        $count = Notification::where('user_id', Auth::id())
+            ->where('is_read', false)
+            ->count();
+            
+        return response()->json(['count' => $count]);
+    }
 }

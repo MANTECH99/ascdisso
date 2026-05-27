@@ -177,12 +177,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 
-
-
-// Wave Payment
-Route::post('/wave/initiate', [WavePaymentController::class, 'initiatePayment'])->name('wave.payment.initiate');
-Route::post('/wave/callback', [WavePaymentController::class, 'handleCallback'])->name('wave.payment.callback');
-Route::get('/wave/status/{commande}', [WavePaymentController::class, 'checkPaymentStatus'])->name('wave.payment.status');
+Route::post('/payment/initiate', [WavePaymentController::class, 'initiatePayment'])->name('payment.initiate');
+Route::post('/payment/callback', [WavePaymentController::class, 'handleCallback'])->name('payment.callback');
+Route::get('/payment/status/{commande}', [WavePaymentController::class, 'checkPaymentStatus'])->name('payment.status');
 
 
 

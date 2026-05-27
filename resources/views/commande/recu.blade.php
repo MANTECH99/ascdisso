@@ -3,6 +3,11 @@
 @section('content')
 <div class="min-h-screen bg-gray-100 py-6">
     <div class="max-w-lg mx-auto px-4">
+        @if(isset($error) && $error)
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                <span class="block sm:inline">{{ $error }}</span>
+            </div>
+        @endif
         <!-- Carte principale style reçu -->
         <div class="bg-white shadow-lg rounded-lg overflow-hidden">
             
@@ -19,6 +24,12 @@
                     </div>
                     <h2 class="text-xl font-bold text-gray-800">Commande confirmée !</h2>
                     <p class="text-gray-500 text-sm mt-1">Merci pour votre commande</p>
+                    @if($commande->mode_paiement === 'orange_money' && $commande->statut_paiement === 'non_paye')
+                        <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 mt-4">
+                            <p class="font-medium text-orange-800">📱 Paiement Orange Money en attente</p>
+                            <p class="text-sm text-orange-600 mt-1">Veuillez vérifier votre téléphone et valider le paiement Orange Money. Sans validation, votre commande ne sera pas traitée.</p>
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Ligne séparatrice décorative -->
@@ -122,7 +133,15 @@
                     <div class="bg-gray-50 rounded-lg p-4">
                         <div class="flex justify-between items-center">
                             <span class="text-sm text-gray-500">Mode de paiement :</span>
-                            <span class="font-medium text-sm">{{ $commande->mode_paiement === 'livraison' ? 'À la livraison' : 'Wave' }}</span>
+                                                <span class="font-medium text-sm">
+                            @if($commande->mode_paiement === 'livraison')
+                                À la livraison
+                            @elseif($commande->mode_paiement === 'wave')
+                                Wave
+                            @elseif($commande->mode_paiement === 'orange_money')
+                                Orange Money
+                            @endif
+                        </span>
                         </div>
                         <div class="border-t border-gray-200 my-2"></div>
                         <div class="flex justify-between items-center">
@@ -150,7 +169,7 @@
 
                 <!-- Boutons d'action -->
                 <div class="space-y-3">
-                    <a href="{{ route('commandes.index') }}" 
+                    <a href="{{ route('cart.index') }}" 
                        class="block w-full bg-red-500 text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-red-600 transition-colors duration-200 text-sm">
                         Voir mes commandes
                     </a>

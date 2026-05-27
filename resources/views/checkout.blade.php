@@ -146,6 +146,22 @@
     </div>
 </div>
 
+<!-- Overlay Orange Money -->
+<div id="orangeOverlay" class="wave-redirect-overlay">
+    <div class="wave-redirect-box">
+        <div class="wave-icon-container" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);">
+            <img src="{{ asset('images/orange.png') }}" alt="Orange Money" style="width: 70px; height: 70px; object-fit: contain;">
+        </div>
+        <h3 class="wave-redirect-title">Paiement Orange Money</h3>
+        <p class="wave-redirect-text">
+            Nous initions votre paiement Orange Money...
+            <br><br>
+            <small>Vous allez recevoir une notification sur votre téléphone pour valider le paiement.</small>
+        </p>
+        <div class="wave-redirect-spinner" style="border-top-color: #f97316;"></div>
+    </div>
+</div>
+
 <style>
 /* Overlay Wave */
 .wave-redirect-overlay {
@@ -237,13 +253,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('checkoutForm');
     
-    // Surbrillance option sélectionnée
     document.querySelectorAll('.payment-option').forEach(option => {
         option.addEventListener('click', function() {
             document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
             this.classList.add('selected');
 
-                        // Cocher le radio button correspondant
             const radio = this.querySelector('input[type="radio"]');
             if (radio) {
                 radio.checked = true;
@@ -251,36 +265,40 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Sélectionner celle par défaut (livraison)
     const defaultOption = document.querySelector('.payment-option[data-method="livraison"]');
     if (defaultOption) {
         defaultOption.classList.add('selected');
     }
-    // Gestion soumission
+    
     form.addEventListener('submit', function(e) {
         const modePaiement = document.querySelector('input[name="mode_paiement"]:checked').value;
         
+        // Gestion Wave
         if (modePaiement === 'wave') {
             e.preventDefault();
             
-            // Vérifier téléphone
             const phone = document.getElementById('telephone').value.replace(/\s/g, '');
             const cleanPhone = phone.replace(/\D/g, '');
             const last9 = cleanPhone.slice(-9);
             
             if (last9.length !== 9 || !/^(77|76|78|70)/.test(last9)) {
-                alert('Pour le paiement Wave, veuillez entrer un numéro de téléphone valide (77, 76, 78 ou 70)');
+                alert('Pour Wave, veuillez entrer un numéro valide (77, 76, 78 ou 70)');
                 return;
             }
             
-            // Afficher overlay
-            // Afficher overlay
             document.getElementById('waveOverlay').classList.add('active');
             
-            // Créer la commande d'abord
+            const overlayTitle = document.querySelector('.wave-redirect-title');
+            const overlayText = document.querySelector('.wave-redirect-text');
+            const overlayIcon = document.querySelector('.wave-icon-container');
+            
+            overlayTitle.textContent = 'Redirection vers Wave';
+            overlayText.innerHTML = 'Vous allez être redirigé vers l\'application Wave pour finaliser votre paiement.<br><br><small>Cette opération peut prendre quelques secondes...</small>';
+            overlayIcon.style.background = '#1DC8FF';
+            
             const formData = new FormData(form);
-                            
-                fetch('/commande', {
+            
+            fetch('/commande', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -296,8 +314,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const commandeId = data.commande_id;
                 
-                // Initier paiement Wave
-                return fetch('/wave/initiate', {
+                return fetch('/payment/initiate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -308,28 +325,98 @@ document.addEventListener('DOMContentLoaded', function() {
                         commande_id: commandeId,
                         customer_name: document.getElementById('nom_complet').value,
                         customer_phone: last9,
-                        description: 'Commande ASC Disso #' + commandeId
+                        payment_method: 'wave'
                     })
                 });
             })
             .then(response => response.json())
-            .then(waveData => {
-                console.log('Wave data:', waveData); // ← Ajoute ce log
-                if (waveData.success && waveData.data && waveData.data.payment_url) {
-                    window.location.href = waveData.data.payment_url;
+            .then(paymentData => {
+                if (paymentData.success && paymentData.data && paymentData.data.payment_url) {
+                    window.location.href = paymentData.data.payment_url;
+                } else {
+                    throw new Error(paymentData.message || 'Erreur de paiement');
                 }
             })
             .catch(error => {
-                document.getElementById('waveOverlay').style.display = 'none';
-                alert('Erreur : ' + error.message);
+                document.getElementById('waveOverlay').classList.remove('active');
+                
+                let errorMessage = 'Une erreur est survenue lors du paiement.';
+                
+                if (error.message.includes('solde') || error.message.includes('insuffisant')) {
+                    errorMessage = 'Votre solde Wave est insuffisant. Veuillez recharger votre compte.';
+                } else if (error.message.includes('réseau') || error.message.includes('connexion')) {
+                    errorMessage = 'Problème de connexion. Vérifiez votre connexion internet et réessayez.';
+                } else if (error.message.includes('expiré')) {
+                    errorMessage = 'La session de paiement a expiré. Veuillez réessayer.';
+                }
+                
+                alert(errorMessage);
             });
         }
-                // Si paiement Orange Money
-        else if (modePaiement === 'orange_money') {
-            e.preventDefault();
-            alert('Orange Money sera bientôt disponible. Veuillez choisir un autre mode de paiement.');
+        
+// Gestion Orange Money
+else if (modePaiement === 'orange_money') {
+    e.preventDefault();
+    
+    const phone = document.getElementById('telephone').value.replace(/\s/g, '');
+    const cleanPhone = phone.replace(/\D/g, '');
+    const last9 = cleanPhone.slice(-9);
+    
+    if (last9.length !== 9 || !/^(77|78)/.test(last9)) {
+        alert('Pour Orange Money, veuillez entrer un numéro valide (77 ou 78)');
+        return;
+    }
+    
+    // Afficher l'overlay Orange Money
+    document.getElementById('orangeOverlay').classList.add('active');
+    
+    const formData = new FormData(form);
+    let commandeId;
+    
+    fetch('/commande', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success && !data.commande_id) {
+            throw new Error(data.message || 'Erreur création commande');
         }
-        // Si cash, soumission normale du formulaire
+        
+        commandeId = data.commande_id;
+        
+        return fetch('/payment/initiate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                commande_id: commandeId,
+                customer_name: document.getElementById('nom_complet').value,
+                customer_phone: last9,
+                description: 'Commande ASC Disso #' + commandeId,
+                payment_method: 'orange_money'
+            })
+        });
+    })
+    .then(response => response.json())
+    .then(paymentData => {
+        if (paymentData.success) {
+            window.location.href = '/commande/recu/' + paymentData.commande_id;
+        } else {
+            window.location.href = '/commande/recu/' + commandeId + '?error=' + encodeURIComponent(paymentData.message || 'Erreur de paiement');
+        }
+    })
+    .catch(error => {
+        window.location.href = '/commande/recu/' + commandeId + '?error=Service de paiement indisponible';
+    });
+}
     });
 });
 </script>
