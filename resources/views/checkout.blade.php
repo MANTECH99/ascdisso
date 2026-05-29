@@ -377,7 +377,8 @@ else if (modePaiement === 'orange_money') {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'  // ← AJOUTER CETTE LIGNE
         },
         body: formData
     })
@@ -413,9 +414,15 @@ else if (modePaiement === 'orange_money') {
             window.location.href = '/commande/recu/' + commandeId + '?error=' + encodeURIComponent(paymentData.message || 'Erreur de paiement');
         }
     })
-    .catch(error => {
+.catch(error => {
+    document.getElementById('orangeOverlay').classList.remove('active');
+    
+    if (commandeId) {
         window.location.href = '/commande/recu/' + commandeId + '?error=Service de paiement indisponible';
-    });
+    } else {
+        alert('Erreur lors de la création de la commande. Veuillez réessayer.');
+    }
+});
 }
     });
 });
