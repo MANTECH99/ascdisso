@@ -242,7 +242,7 @@ class CommandeController extends Controller
 private function sendWhatsAppReceipt($commande)
 {
     $phone = '221' . substr(preg_replace('/[^0-9]/', '', $commande->telephone), -9);
-    $receiptUrl = url('commande/recu/' . $commande->id);
+    $receiptUrl = '/commande/recu/' . $commande->id;
     
     $payload = [
         'messaging_product' => 'whatsapp',
@@ -265,7 +265,7 @@ private function sendWhatsAppReceipt($commande)
                     'sub_type' => 'url',
                     'index' => '0',
                     'parameters' => [
-                        ['type' => 'text', 'text' => $receiptUrl]
+                        ['type' => 'text', 'text' => 'https://ascdisso.com' . $receiptUrl]
                     ]
                 ]
             ]
