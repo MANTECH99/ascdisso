@@ -220,32 +220,43 @@
 }
 </style>
 
+<div id="paymentModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:12px; padding:24px; max-width:400px; width:90%; text-align:center;">
+        <p id="modalMessage" style="font-size:16px; color:#333; margin-bottom:20px;"></p>
+        <div style="display:flex; gap:10px; justify-content:center;">
+            <button id="modalCancel" style="padding:10px 20px; border:1px solid #ddd; border-radius:8px; background:white; color:#666; cursor:pointer;">Annuler</button>
+            <button id="modalConfirm" style="padding:10px 20px; border:none; border-radius:8px; background:#f97316; color:white; cursor:pointer;">Confirmer</button>
+        </div>
+    </div>
+</div>
+
 @section('scripts')
 <script>
 @if(($commande->mode_paiement === 'orange_money' || $commande->mode_paiement === 'wave') && $commande->statut_paiement === 'non_paye')
-    let checkCount = 0;
-    const maxChecks = 30; // 5 minutes
+    let checkCount = parseInt(localStorage.getItem('checkCount_{{ $commande->id }}') || 0);
+    const maxChecks = 30;
     
     function checkPaymentStatus() {
         fetch('/payment/status/{{ $commande->id }}')
             .then(response => response.json())
             .then(data => {
                 checkCount++;
+                localStorage.setItem('checkCount_{{ $commande->id }}', checkCount);
                 
                 if (data.statut_paiement === 'paye') {
+                    localStorage.removeItem('checkCount_{{ $commande->id }}');
                     document.getElementById('statusSpinner').classList.remove('animate-spin', 'border-t-transparent');
                     document.getElementById('statusSpinner').classList.add('bg-green-500', 'border-green-500');
                     document.getElementById('statusText').textContent = '✅ Paiement confirmé !';
                     document.getElementById('statusText').className = 'text-sm text-green-800 font-medium';
-                    document.getElementById('statusHint').textContent = 'Votre commande sera traitée dans les plus brefs délais.';
+                    document.getElementById('statusHint').textContent = 'Votre commande sera traitée.';
                     document.getElementById('statusHint').className = 'text-xs text-green-600';
                     document.getElementById('retryButton').style.display = 'none';
                     setTimeout(() => location.reload(), 2000);
                 } else if (checkCount >= maxChecks) {
+                    localStorage.removeItem('checkCount_{{ $commande->id }}');
                     document.getElementById('statusSpinner').classList.remove('animate-spin');
-                    document.getElementById('statusSpinner').classList.add('border-orange-500');
                     document.getElementById('statusText').textContent = '⚠️ Paiement non confirmé';
-                    document.getElementById('statusText').className = 'text-sm text-orange-800 font-medium';
                     document.getElementById('retryButton').style.display = 'block';
                 } else {
                     setTimeout(checkPaymentStatus, 10000);
@@ -254,47 +265,70 @@
             .catch(() => setTimeout(checkPaymentStatus, 10000));
     }
     
-    setTimeout(checkPaymentStatus, 5000);
+    // Si le compteur a déjà dépassé le max, afficher directement le bouton
+    if (checkCount >= maxChecks) {
+        document.getElementById('statusSpinner').classList.remove('animate-spin');
+        document.getElementById('statusText').textContent = '⚠️ Paiement non confirmé';
+        document.getElementById('retryButton').style.display = 'block';
+    } else {
+        setTimeout(checkPaymentStatus, 5000);
+    }
 @endif
 
+function showModal(message, onConfirm, showCancel = true) {
+    document.getElementById('modalMessage').textContent = message;
+    document.getElementById('paymentModal').style.display = 'flex';
+    
+    document.getElementById('modalCancel').style.display = showCancel ? 'inline-block' : 'none';
+    document.getElementById('modalConfirm').textContent = showCancel ? 'Confirmer' : 'OK';
+    
+    document.getElementById('modalConfirm').onclick = function() {
+        document.getElementById('paymentModal').style.display = 'none';
+        if (onConfirm) onConfirm();
+    };
+    
+    document.getElementById('modalCancel').onclick = function() {
+        document.getElementById('paymentModal').style.display = 'none';
+    };
+}
+
 function relancerPaiement(commandeId, modePaiement, telephone) {
-    if (!confirm('Voulez-vous relancer le paiement ?')) return;
+    const methodName = modePaiement === 'orange_money' ? 'Orange Money' : 'Wave';
     
-    const btn = event.target;
-    btn.disabled = true;
-    btn.textContent = 'Patientez...';
-    
-    fetch('/payment/initiate', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            commande_id: commandeId,
-            customer_name: '{{ $commande->nom_complet }}',
-            customer_phone: telephone.replace(/\D/g, '').slice(-9),
-            payment_method: modePaiement
+    showModal('Voulez-vous relancer le paiement ' + methodName + ' ?', function() {
+        const btn = document.querySelector('#retryButton button');
+        btn.disabled = true;
+        btn.textContent = 'Patientez...';
+        
+        fetch('/payment/initiate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                commande_id: commandeId,
+                customer_name: '{{ $commande->nom_complet }}',
+                customer_phone: telephone.replace(/\D/g, '').slice(-9),
+                payment_method: modePaiement
+            })
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            if (modePaiement === 'wave' && data.data && data.data.payment_url) {
-                window.location.href = data.data.payment_url;
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (modePaiement === 'wave' && data.data && data.data.payment_url) {
+                    window.location.href = data.data.payment_url;
+                } else {
+                    showModal('Paiement relancé ! Vérifiez votre téléphone.', function() { location.reload(); }, false);
+                }
             } else {
-                alert('Paiement relancé. Vérifiez votre téléphone.');
-                location.reload();
+                showModal(data.message || 'Erreur', function() { location.reload(); }, false);
             }
-        } else {
-            alert(data.message || 'Erreur');
-            location.reload();
-        }
-    })
-    .catch(() => {
-        alert('Erreur réseau.');
-        location.reload();
+        })
+        .catch(() => {
+            showModal('Erreur réseau', function() { location.reload(); }, false);
+        });
     });
 }
 </script>
