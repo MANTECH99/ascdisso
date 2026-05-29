@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PanierSession;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class CommandeController extends Controller
 {
@@ -175,6 +177,9 @@ class CommandeController extends Controller
             ]);
         }
 
+                // Envoyer le reçu WhatsApp
+        $this->sendWhatsAppReceipt($commande);
+
             // Si Wave, retourner JSON avec l'ID
         if ($request->mode_paiement === 'wave' || $request->mode_paiement === 'orange_money' || $request->expectsJson()) {
         return response()->json([
@@ -232,4 +237,50 @@ class CommandeController extends Controller
             
         return response()->json(['count' => $count]);
     }
+
+
+private function sendWhatsAppReceipt($commande)
+{
+    $phone = '221' . substr(preg_replace('/[^0-9]/', '', $commande->telephone), -9);
+    $receiptUrl = secure_url('commande/recu/' . $commande->id);
+    
+    $payload = [
+        'messaging_product' => 'whatsapp',
+        'to' => $phone,
+        'type' => 'template',
+        'template' => [
+            'name' => 'votre_ticket',
+            'language' => ['code' => 'fr'],
+            'components' => [
+                [
+                    'type' => 'body',
+                    'parameters' => [
+                        ['type' => 'text', 'text' => $commande->nom_complet],
+                        ['type' => 'text', 'text' => '#' . str_pad($commande->id, 6, '0', STR_PAD_LEFT)],
+                        ['type' => 'text', 'text' => number_format($commande->total, 0, ',', ' ')]
+                    ]
+                ],
+                [
+                    'type' => 'button',
+                    'sub_type' => 'url',
+                    'index' => '0',
+                    'parameters' => [
+                        ['type' => 'text', 'text' => $receiptUrl]
+                    ]
+                ]
+            ]
+        ]
+    ];
+    
+    try {
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . config('services.whatsapp.token'),
+            'Content-Type' => 'application/json',
+        ])->post('https://graph.facebook.com/v25.0/' . config('services.whatsapp.phone_number_id') . '/messages', $payload);
+        
+        Log::info('WhatsApp envoyé', ['commande' => $commande->id, 'response' => $response->json()]);
+    } catch (\Exception $e) {
+        Log::error('WhatsApp erreur: ' . $e->getMessage());
+    }
+}
 }

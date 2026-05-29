@@ -20,6 +20,12 @@ return [
         'api_url' => env('DEXCHANGE_API_URL'),
     ],
 
+
+    'whatsapp' => [
+    'token' => env('WHATSAPP_TOKEN'),
+    'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
+    ],
+
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],
