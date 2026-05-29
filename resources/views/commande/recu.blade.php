@@ -32,6 +32,23 @@
                     @endif
                 </div>
 
+                @if(($commande->mode_paiement === 'orange_money' || $commande->mode_paiement === 'wave') && $commande->statut_paiement === 'non_paye')
+    <div id="paymentStatus" class="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
+        <div class="flex items-center gap-3 mb-3">
+<div id="statusSpinner" class="w-5 h-5 border-2 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+            <p id="statusText" class="text-sm text-orange-800 font-medium">Vérification du paiement en cours...</p>
+        </div>
+        <p id="statusHint" class="text-xs text-orange-600 mb-3">Si vous avez déjà validé sur votre téléphone, votre commande sera confirmée automatiquement.</p>
+        <div id="retryButton" style="display:none;">
+            <p class="text-xs text-orange-600 mb-3">Le paiement n'a pas été confirmé. Vous pouvez réessayer.</p>
+            <button onclick="relancerPaiement({{ $commande->id }}, '{{ $commande->mode_paiement }}', '{{ $commande->telephone }}')" 
+                    class="w-full border-2 border-orange-400 text-orange-600 py-2.5 px-4 rounded-lg font-medium hover:bg-orange-100 transition text-sm">
+                Relancer le paiement {{ $commande->mode_paiement === 'orange_money' ? 'Orange Money' : 'Wave' }}
+            </button>
+        </div>
+    </div>
+@endif
+
                 <!-- Ligne séparatrice décorative -->
                 <div class="border-t-2 border-dashed border-gray-200 my-6"></div>
 
@@ -188,4 +205,98 @@
         </div>
     </div>
 </div>
+
+{{-- AJOUTER LE STYLE ICI --}}
+<style>
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+.border-t-transparent {
+    border-top-color: transparent !important;
+}
+</style>
+
+@section('scripts')
+<script>
+@if(($commande->mode_paiement === 'orange_money' || $commande->mode_paiement === 'wave') && $commande->statut_paiement === 'non_paye')
+    let checkCount = 0;
+    const maxChecks = 30; // 5 minutes
+    
+    function checkPaymentStatus() {
+        fetch('/payment/status/{{ $commande->id }}')
+            .then(response => response.json())
+            .then(data => {
+                checkCount++;
+                
+                if (data.statut_paiement === 'paye') {
+                    document.getElementById('statusSpinner').classList.remove('animate-spin', 'border-t-transparent');
+                    document.getElementById('statusSpinner').classList.add('bg-green-500', 'border-green-500');
+                    document.getElementById('statusText').textContent = '✅ Paiement confirmé !';
+                    document.getElementById('statusText').className = 'text-sm text-green-800 font-medium';
+                    document.getElementById('statusHint').textContent = 'Votre commande sera traitée dans les plus brefs délais.';
+                    document.getElementById('statusHint').className = 'text-xs text-green-600';
+                    document.getElementById('retryButton').style.display = 'none';
+                    setTimeout(() => location.reload(), 2000);
+                } else if (checkCount >= maxChecks) {
+                    document.getElementById('statusSpinner').classList.remove('animate-spin');
+                    document.getElementById('statusSpinner').classList.add('border-orange-500');
+                    document.getElementById('statusText').textContent = '⚠️ Paiement non confirmé';
+                    document.getElementById('statusText').className = 'text-sm text-orange-800 font-medium';
+                    document.getElementById('retryButton').style.display = 'block';
+                } else {
+                    setTimeout(checkPaymentStatus, 10000);
+                }
+            })
+            .catch(() => setTimeout(checkPaymentStatus, 10000));
+    }
+    
+    setTimeout(checkPaymentStatus, 5000);
+@endif
+
+function relancerPaiement(commandeId, modePaiement, telephone) {
+    if (!confirm('Voulez-vous relancer le paiement ?')) return;
+    
+    const btn = event.target;
+    btn.disabled = true;
+    btn.textContent = 'Patientez...';
+    
+    fetch('/payment/initiate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            commande_id: commandeId,
+            customer_name: '{{ $commande->nom_complet }}',
+            customer_phone: telephone.replace(/\D/g, '').slice(-9),
+            payment_method: modePaiement
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (modePaiement === 'wave' && data.data && data.data.payment_url) {
+                window.location.href = data.data.payment_url;
+            } else {
+                alert('Paiement relancé. Vérifiez votre téléphone.');
+                location.reload();
+            }
+        } else {
+            alert(data.message || 'Erreur');
+            location.reload();
+        }
+    })
+    .catch(() => {
+        alert('Erreur réseau.');
+        location.reload();
+    });
+}
+</script>
+@endsection
 @endsection
