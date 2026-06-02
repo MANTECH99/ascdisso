@@ -24,7 +24,7 @@
                     </div>
                     <h2 class="text-xl font-bold text-gray-800">Commande confirmée !</h2>
                     <p class="text-gray-500 text-sm mt-1">Merci pour votre commande</p>
-                    @if($commande->mode_paiement === 'orange_money' && $commande->statut_paiement === 'non_paye')
+                    @if($commande->mode_paiement === 'orange_money' && $commande->statut_paiement === 'non_paye' && !isset($error))
                         <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 mt-4">
                             <p class="font-medium text-orange-800">📱 Paiement Orange Money en attente</p>
                             <p class="text-sm text-orange-600 mt-1">Veuillez vérifier votre téléphone et valider le paiement Orange Money. Sans validation, votre commande ne sera pas traitée.</p>
@@ -32,7 +32,7 @@
                     @endif
                 </div>
 
-                @if(($commande->mode_paiement === 'orange_money' || $commande->mode_paiement === 'wave') && $commande->statut_paiement === 'non_paye')
+                @if(($commande->mode_paiement === 'orange_money' || $commande->mode_paiement === 'wave') && $commande->statut_paiement === 'non_paye' && !isset($error))
     <div id="paymentStatus" class="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
         <div class="flex items-center gap-3 mb-3">
 <div id="statusSpinner" class="w-5 h-5 border-2 border-green-500 border-t-transparent rounded-full animate-spin"></div>
