@@ -12,7 +12,7 @@
     @if($commande->statut_paiement === 'non_paye')
     <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
         <p class="text-xs text-orange-600 mb-3">Le paiement a échoué. Vous pouvez réessayer.</p>
-        <button onclick="relancerPaiement({{ $commande->id }}, '{{ $commande->mode_paiement }}', '{{ $commande->telephone }}')" 
+        <button id="errorRetryButton" onclick="relancerPaiement({{ $commande->id }}, '{{ $commande->mode_paiement }}', '{{ $commande->telephone }}')" 
                 class="w-full border-2 border-orange-400 text-orange-600 py-2.5 px-4 rounded-lg font-medium hover:bg-orange-100 transition text-sm">
             Relancer le paiement {{ $commande->mode_paiement === 'orange_money' ? 'Orange Money' : 'Wave' }}
         </button>
@@ -316,10 +316,9 @@ function showModal(message, onConfirm, showCancel = true) {
 
 function relancerPaiement(commandeId, modePaiement, telephone) {
     const methodName = modePaiement === 'orange_money' ? 'Orange Money' : 'Wave';
+    const btn = document.querySelector('#retryButton button') || document.querySelector('#errorRetryButton');
     
     showModal('Voulez-vous relancer le paiement ' + methodName + ' ?', function() {
-        // Chercher le bouton cliqué (celui dans l'erreur OU dans retryButton)
-        const btn = document.querySelector('#retryButton button') || event.target;
         if (btn) {
             btn.disabled = true;
             btn.textContent = 'Patientez...';
