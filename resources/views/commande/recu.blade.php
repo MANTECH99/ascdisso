@@ -318,9 +318,12 @@ function relancerPaiement(commandeId, modePaiement, telephone) {
     const methodName = modePaiement === 'orange_money' ? 'Orange Money' : 'Wave';
     
     showModal('Voulez-vous relancer le paiement ' + methodName + ' ?', function() {
-        const btn = document.querySelector('#retryButton button');
-        btn.disabled = true;
-        btn.textContent = 'Patientez...';
+        // Chercher le bouton cliqué (celui dans l'erreur OU dans retryButton)
+        const btn = document.querySelector('#retryButton button') || event.target;
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Patientez...';
+        }
         
         fetch('/payment/initiate', {
             method: 'POST',
