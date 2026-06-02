@@ -3,11 +3,22 @@
 @section('content')
 <div class="min-h-screen bg-gray-100 py-6">
     <div class="max-w-lg mx-auto px-4">
-        @if(isset($error) && $error)
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                <span class="block sm:inline">{{ $error }}</span>
-            </div>
-        @endif
+@if(isset($error) && $error)
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        <span class="block sm:inline">{{ $error }}</span>
+    </div>
+    
+    {{-- AJOUTER CE BLOC --}}
+    @if($commande->statut_paiement === 'non_paye')
+    <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
+        <p class="text-xs text-orange-600 mb-3">Le paiement a échoué. Vous pouvez réessayer.</p>
+        <button onclick="relancerPaiement({{ $commande->id }}, '{{ $commande->mode_paiement }}', '{{ $commande->telephone }}')" 
+                class="w-full border-2 border-orange-400 text-orange-600 py-2.5 px-4 rounded-lg font-medium hover:bg-orange-100 transition text-sm">
+            Relancer le paiement {{ $commande->mode_paiement === 'orange_money' ? 'Orange Money' : 'Wave' }}
+        </button>
+    </div>
+    @endif
+@endif
         <!-- Carte principale style reçu -->
         <div class="bg-white shadow-lg rounded-lg overflow-hidden">
             
