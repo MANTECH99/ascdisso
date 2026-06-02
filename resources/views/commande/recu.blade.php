@@ -344,14 +344,20 @@ function relancerPaiement(commandeId, modePaiement, telephone) {
                 if (modePaiement === 'wave' && data.data && data.data.payment_url) {
                     window.location.href = data.data.payment_url;
                 } else {
-                    showModal('Paiement relancé ! Vérifiez votre téléphone.', function() { location.reload(); }, false);
+                    showModal('Paiement relancé ! Vérifiez votre téléphone.', function() { 
+                        localStorage.removeItem('checkCount_{{ $commande->id }}');
+                        window.location.href = window.location.pathname;}, false);
                 }
             } else {
-                showModal(data.message || 'Erreur', function() { location.reload(); }, false);
+                showModal(data.message || 'Erreur', function() { 
+                    localStorage.removeItem('checkCount_{{ $commande->id }}');
+                    window.location.href = window.location.pathname;}, false);
             }
         })
         .catch(() => {
-            showModal('Erreur réseau', function() { location.reload(); }, false);
+            showModal('Erreur réseau', function() { 
+                localStorage.removeItem('checkCount_{{ $commande->id }}');
+                window.location.href = window.location.pathname;}, false);
         });
     });
 }
