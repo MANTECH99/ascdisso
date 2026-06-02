@@ -44,7 +44,14 @@
                     {{ ucfirst($commande->statut) }}
                 </span>
             </p>
-            <p><span class="text-sm text-gray-600">Paiement :</span> {{ $commande->mode_paiement === 'livraison' ? 'Cash' : 'Wave' }}</p>
+            <p><span class="text-sm text-gray-600">Paiement :</span>
+                            @if($commande->mode_paiement === 'livraison')
+                                À la livraison
+                            @elseif($commande->mode_paiement === 'wave')
+                                Wave
+                            @elseif($commande->mode_paiement === 'orange_money')
+                                Orange Money
+                            @endif</p>
             <p><span class="text-sm text-gray-600">Livraison :</span> {{ $commande->mode_livraison }}</p>
         </div>
         

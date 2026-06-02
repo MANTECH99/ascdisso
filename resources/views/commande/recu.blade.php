@@ -241,9 +241,20 @@
 
 @section('scripts')
 <script>
-@if(($commande->mode_paiement === 'orange_money' || $commande->mode_paiement === 'wave') && $commande->statut_paiement === 'non_paye')
+@if(($commande->mode_paiement === 'orange_money' || $commande->mode_paiement === 'wave') && $commande->statut_paiement === 'non_paye' && !isset($error))
     let checkCount = parseInt(localStorage.getItem('checkCount_{{ $commande->id }}') || 0);
     const maxChecks = 30;
+    
+    // Si déjà atteint le max, ne pas relancer le spinner
+    if (checkCount >= maxChecks) {
+        document.getElementById('statusSpinner').classList.remove('animate-spin');
+        document.getElementById('statusText').textContent = '⚠️ Paiement non confirmé';
+        document.getElementById('retryButton').style.display = 'block';
+        // Ne pas lancer checkPaymentStatus()
+    } else {
+        // Lancer la vérification normalement
+        setTimeout(checkPaymentStatus, 5000);
+    }
     
     function checkPaymentStatus() {
         fetch('/payment/status/{{ $commande->id }}')
@@ -272,15 +283,6 @@
                 }
             })
             .catch(() => setTimeout(checkPaymentStatus, 10000));
-    }
-    
-    // Si le compteur a déjà dépassé le max, afficher directement le bouton
-    if (checkCount >= maxChecks) {
-        document.getElementById('statusSpinner').classList.remove('animate-spin');
-        document.getElementById('statusText').textContent = '⚠️ Paiement non confirmé';
-        document.getElementById('retryButton').style.display = 'block';
-    } else {
-        setTimeout(checkPaymentStatus, 5000);
     }
 @endif
 
