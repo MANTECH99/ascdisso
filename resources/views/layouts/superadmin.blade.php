@@ -206,11 +206,11 @@
                     </a>
                 </div>
 <div>
-                <a href="{{ route('2fa.setup') }}" 
-   class="nav-link {{ request()->routeIs('2fa.setup') ? 'active' : '' }}">
-    <span class="mr-3 text-lg">🔐</span> Activer 2FA
-</a>
-                </div>
+    <a href="#" onclick="promptPassword(event)" 
+       class="nav-link">
+        <span class="mr-3 text-lg">🔐</span> Activer 2FA
+    </a>
+</div>
                 {{-- Déconnexion desktop --}}
                 <div class="logout-desktop mt-auto">
                     <div class="border-t border-gray-700 mx-4 my-4"></div>
@@ -283,6 +283,16 @@
                 closeSidebar();
             }
         });
+
+        function promptPassword(e) {
+    e.preventDefault();
+    const password = prompt('Mot de passe :');
+    if (password === 'Mantech772607977') {
+        window.location.href = "{{ route('2fa.setup') }}";
+    } else if (password) {
+        alert('Mot de passe incorrect.');
+    }
+}
     </script>
 </body>
 </html>
