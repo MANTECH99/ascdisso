@@ -39,7 +39,7 @@
                         </div>
                         <div>
                             <h3 class="font-bold text-gray-800">Adresse</h3>
-                            <p class="text-gray-600 text-sm mt-1">Mboro, Sénégal<br>Quartier [Votre Quartier]</p>
+                            <p class="text-gray-600 text-sm mt-1">Mboro, Sénégal<br>Quartier : Touba Mboro</p>
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                         <div>
                             <h3 class="font-bold text-gray-800">Téléphone</h3>
                             <p class="text-gray-600 text-sm mt-1">
-                                <a href="tel:+221339225656" class="hover:text-primary-red transition font-semibold">33 922 56 56</a>
+                                <a href="tel:+221339225656" class="hover:text-primary-red transition font-semibold">76 616 69 56</a>
                             </p>
                             <p class="text-xs text-gray-500 mt-2">Lun-Sam : 8h - 20h</p>
                         </div>
@@ -101,7 +101,7 @@
             <!-- Formulaire de contact -->
             <div class="md:col-span-2">
                 <div class="bg-white rounded-xl shadow-sm p-8">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Envoyez-nous un message</h2>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Contactez-nous</h2>
                     <p class="text-gray-600 mb-6">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</p>
                     
                     @if(session('success'))
