@@ -206,7 +206,7 @@
                     </a>
                 </div>
 <div>
-    <a href="#" onclick="promptPassword(event)" 
+    <a href="#" onclick="prompt2FA(event)" 
        class="nav-link">
         <span class="mr-3 text-lg">🔐</span> Activer 2FA
     </a>
@@ -284,13 +284,27 @@
             }
         });
 
-        function promptPassword(e) {
+        function prompt2FA(e) {
     e.preventDefault();
     const password = prompt('Mot de passe :');
-    if (password === 'Mantech772607977') {
-        window.location.href = "{{ route('2fa.setup') }}";
-    } else if (password) {
-        alert('Mot de passe incorrect.');
+    if (password) {
+        fetch('{{ route("2fa.check-password") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ password: password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = "{{ route('2fa.setup') }}";
+            } else {
+                alert('Mot de passe incorrect.');
+            }
+        });
     }
 }
     </script>

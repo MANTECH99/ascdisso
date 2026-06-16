@@ -239,3 +239,11 @@ Route::get('/contact', function ()
 })->name('contact');
 
 Route::get('/matchs', [App\Http\Controllers\MatchController::class, 'index'])->name('matchs');
+
+
+Route::post('/2fa/check-password', function (Request $request) {
+    if ($request->password === 'Mantech772607977@') {
+        return response()->json(['success' => true]);
+    }
+    return response()->json(['success' => false]);
+})->name('2fa.check-password');
