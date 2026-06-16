@@ -1,7 +1,34 @@
 User-agent: *
 Allow: /
+
+# ========== Pages privées / sans intérêt SEO ==========
 Disallow: /admin
 Disallow: /cart
 Disallow: /checkout
+Disallow: /account
+Disallow: /commandes
+Disallow: /messages
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /logout
+Disallow: /2fa/verify
+Disallow: /2fa/setup
+
+# ========== Actions POST (pas de contenu à indexer) ==========
+Disallow: /avis
+Disallow: /cart/add
+Disallow: /cart/update
+Disallow: /cart/remove
+Disallow: /commande
+Disallow: /payment/initiate
+Disallow: /payment/callback
+
+# ========== Éviter le duplicate content ==========
 Disallow: /search
+Disallow: /*?*
+
+# ========== Crawl-delay (optionnel) ==========
+Crawl-delay: 10
+
 Sitemap: https://ascdisso.com/sitemap.xml
