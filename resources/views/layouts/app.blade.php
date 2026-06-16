@@ -233,6 +233,47 @@
     Bonjour, <strong>{{ Auth::check() ? Auth::user()->nom_complet : 'Invité' }}</strong>
 </span>
 
+    <!-- 👇 MENU DÉROULANT AU CLIC 👇 -->
+    <div class="relative hidden md:block" id="dropdown-menu">
+        <button onclick="toggleDropdown()" class="flex items-center text-gray-700 hover:text-primary-red focus:outline-none">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+        
+        <div id="dropdown-content" class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl ring-1 ring-black ring-opacity-5 hidden z-50 py-2">
+            <a href="{{ route('matchs') }}" class="flex items-center px-4 py-3 hover:bg-red-50 transition">
+                <svg class="w-5 h-5 text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="text-sm text-gray-700">Matchs</span>
+            </a>
+            
+            <a href="{{ route('about') }}" class="flex items-center px-4 py-3 hover:bg-blue-50 transition">
+                <svg class="w-5 h-5 text-blue-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="text-sm text-gray-700">À propos</span>
+            </a>
+            
+            <a href="{{ route('contact') }}" class="flex items-center px-4 py-3 hover:bg-purple-50 transition">
+                <svg class="w-5 h-5 text-purple-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+                <span class="text-sm text-gray-700">Contact</span>
+            </a>
+            
+            <a href="{{ route('blog') }}" class="flex items-center px-4 py-3 hover:bg-green-50 transition">
+                <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                </svg>
+                <span class="text-sm text-gray-700">Blog</span>
+            </a>
+        </div>
+    </div>
+    <!-- 👆 FIN DU MENU DÉROULANT 👆 -->
+
     <!-- Icône Messages Desktop -->
 <a href="{{ route('messages') }}" class="flex items-center space-x-1 text-gray-700 hover:text-primary-red relative">
     <div class="relative">
@@ -619,6 +660,24 @@ function toggleMobileMenu() {
         document.body.style.overflow = '';
     }
 }
+
+
+</script>
+<script>
+function toggleDropdown() {
+    const dropdown = document.getElementById('dropdown-content');
+    dropdown.classList.toggle('hidden');
+}
+
+// Fermer le dropdown si on clique ailleurs
+document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('dropdown-menu');
+    const dropdownContent = document.getElementById('dropdown-content');
+    
+    if (!dropdown.contains(event.target)) {
+        dropdownContent.classList.add('hidden');
+    }
+});
 </script>
 @yield('scripts')
 </body>

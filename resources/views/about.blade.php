@@ -14,7 +14,7 @@
 <!-- Hero Section avec image de fond -->
 <div class="relative py-24 md:py-32 overflow-hidden">
     <div class="absolute inset-0 bg-primary-dark">
-        <div class="absolute inset-0 opacity-30" style="background-image: url('https://images.pexels.com/photos/46798/the-ball-stadion-football-the-pitch-46798.jpeg?auto=compress&cs=tinysrgb&w=1600'); background-size: cover; background-position: center;"></div>
+        <div class="absolute inset-0 opacity-30" style="background-image: url('https://images.pexels.com/photos/114296/pexels-photo-114296.jpeg?auto=compress&cs=tinysrgb&w=1600'); background-size: cover; background-position: center;"></div>
     </div>
     
     <div class="container mx-auto px-4 relative z-10">
@@ -210,18 +210,14 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div class="text-center">
-                <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
-                    <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-                        <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                    </div>
-                </div>
-                <h3 class="font-bold text-lg">Président</h3>
-                <p class="text-primary-red font-medium">M. Bara Guissé</p>
-                <p class="text-gray-500 text-sm mt-1">Parrain du club</p>
-            </div>
+<div class="text-center">
+    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
+        <img src="{{ asset('images/president.jpeg') }}" alt="M. Bara Guissé" class="w-full h-full object-cover">
+    </div>
+    <h3 class="font-bold text-lg">Président</h3>
+    <p class="text-primary-red font-medium">M. Bara Guissé</p>
+    <p class="text-gray-500 text-sm mt-1">Parrain du club</p>
+</div>
 
             <div class="text-center">
                 <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
