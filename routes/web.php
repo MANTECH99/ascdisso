@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\CommandeController as AdminCommandeController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TwoFactorController;
+
 
 
 // Sitemap
@@ -141,6 +143,24 @@ Route::middleware(['auth'])->group(function () {
     
 });
 
+
+
+/*
+|--------------------------------------------------------------------------
+| Routes Super Admin (prioritaires)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'superadmin','2fa'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/cashout', [App\Http\Controllers\Admin\CashoutController::class, 'index'])
+        ->name('cashout.index');
+    Route::post('/cashout', [App\Http\Controllers\Admin\CashoutController::class, 'initiate'])
+        ->name('cashout.initiate');
+});
+
+// Callback hors middleware (appelé par Dexchange)
+Route::post('/admin/cashout/callback', [App\Http\Controllers\Admin\CashoutController::class, 'callback']);
+
 /*
 |--------------------------------------------------------------------------
 | Routes Administrateur
@@ -148,6 +168,11 @@ Route::middleware(['auth'])->group(function () {
 */
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+
+    // Gestion des matchs
+    Route::resource('matchs', App\Http\Controllers\Admin\MatchController::class);
+    Route::post('/matchs/{id}/toggle-visibility', [App\Http\Controllers\Admin\MatchController::class, 'toggleVisibility'])
+        ->name('matchs.toggleVisibility');
     
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
@@ -184,3 +209,33 @@ Route::get('/payment/status/{commande}', [WavePaymentController::class, 'checkPa
 
 
 
+
+
+Route::get('/2fa/verify', [TwoFactorController::class, 'showVerifyForm'])->name('2fa.verify');
+Route::post('/2fa/verify', [TwoFactorController::class, 'verify']);
+Route::get('/2fa/setup', [TwoFactorController::class, 'setup'])->name('2fa.setup')->middleware('auth');
+
+/*
+|--------------------------------------------------------------------------
+| Routes Pages Statiques
+|--------------------------------------------------------------------------
+*/
+
+// À propos
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+// Blog
+Route::get('/blog', function () {
+    return view('blog.index');
+})->name('blog');
+
+// Contact
+Route::get('/contact', function () 
+
+{
+    return view('contact');
+})->name('contact');
+
+Route::get('/matchs', [App\Http\Controllers\MatchController::class, 'index'])->name('matchs');

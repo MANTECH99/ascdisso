@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use PragmaRX\Google2FALaravel\Support\Authenticator;
 
 class User extends Authenticatable
 {
@@ -17,6 +18,7 @@ class User extends Authenticatable
         'password',
         'adresse',
         'is_admin',
+        'is_super_admin',
     ];
 
     protected $hidden = [
@@ -52,5 +54,39 @@ public function isAdmin()
     
     // Ou plus simplement :
     // return (bool) $this->is_admin;
+}
+
+public function isSuperAdmin()
+{
+    return $this->is_super_admin == 1 || $this->is_super_admin === true;
+}
+
+
+
+
+
+public function enable2FA()
+{
+    $this->google2fa_secret = app('pragmarx.google2fa')->generateSecretKey();
+    $this->google2fa_enabled = true;
+    $this->save();
+}
+
+public function disable2FA()
+{
+    $this->google2fa_secret = null;
+    $this->google2fa_enabled = false;
+    $this->save();
+}
+
+public function get2FAQRCode()
+{
+    if (!$this->google2fa_secret) return null;
+    
+    return app('pragmarx.google2fa')->getQRCodeInline(
+        'ASC Disso',
+        $this->email,
+        $this->google2fa_secret
+    );
 }
 }

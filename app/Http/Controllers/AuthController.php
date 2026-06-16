@@ -67,9 +67,16 @@ public function login(Request $request)
 
     if (Auth::attempt($credentials, $request->remember)) {
         $request->session()->regenerate();
+
+                session()->forget('2fa_verified'); // ← AJOUTER CETTE LIGNE
         
-        // Vérifier si l'utilisateur est admin
-        if (Auth::user()->isAdmin()) { // ou Auth::user()->role === 'admin'
+        // Super admin → directement vers le cashout
+        if (Auth::user()->isSuperAdmin()) {
+            return redirect()->route('admin.cashout.index');
+        }
+        
+        // Admin simple → dashboard normal
+        if (Auth::user()->isAdmin()) {
             return redirect()->route('admin.dashboard');
         }
         

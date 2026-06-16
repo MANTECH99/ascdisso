@@ -138,6 +138,11 @@ class CommandeController extends Controller
             }
         }
 
+                // AJOUTER : Calcul des frais de 5%
+        $fraisPourcentage = 5; // 5%
+        $fraisMontant = $sousTotal * ($fraisPourcentage / 100);
+        $totalAvecFrais = $sousTotal + $fraisMontant;
+
         // Créer la commande
         $commande = Commande::create([
             'user_id' => Auth::id(),
@@ -150,7 +155,8 @@ class CommandeController extends Controller
             'statut' => 'en_attente',
             'statut_paiement' => 'non_paye',
             'sous_total' => $sousTotal,
-            'total' => $sousTotal,
+            'frais' => $fraisMontant, // AJOUTER
+            'total' => $totalAvecFrais, // MODIFIER : utiliser le total avec frais
         ]);
 
         // Enregistrer les produits de la commande

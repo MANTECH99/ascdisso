@@ -13,11 +13,14 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'superadmin' => \App\Http\Middleware\SuperAdminMiddleware::class,
+            '2fa' => \App\Http\Middleware\TwoFactorMiddleware::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [
             'wave/callback',
             'payment/callback',
+            'admin/cashout/callback',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

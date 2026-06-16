@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\PanierSession;
 use App\Models\User;
 use App\Models\Notification;
+use App\Models\CashoutLog;
 
 class WavePaymentController extends Controller
 {
@@ -238,6 +239,19 @@ public function handleCallback(Request $request)
                 'statut_paiement' => 'paye',
                 'statut' => 'en_attente'
             ]);
+
+                // ← AJOUTER CECI
+    CashoutLog::create([
+        'admin_id' => null,
+        'site' => 'disso',
+        'service_code' => $commande->mode_paiement === 'orange_money' ? 'OM_SN_CASHOUT' : 'WAVE_SN_CASHOUT',
+        'phone' => $commande->telephone,
+        'amount' => $commande->total,
+        'external_id' => $externalId,
+        'status' => 'success',
+        'response' => json_encode($data),
+        'callback_response' => json_encode($request->all()),
+    ]);
             
             // Vider le panier après paiement réussi
             if ($commande->cart_token) {

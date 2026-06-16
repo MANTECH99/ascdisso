@@ -116,10 +116,27 @@
                         @endforeach
                     </div>
                     
-                    <div class="flex justify-between font-bold text-lg mt-4 pt-4 border-t">
-                        <span>Total</span>
-                        <span class="text-red-500">{{ number_format($total, 0, ',', ' ') }} FCFA</span>
-                    </div>
+        <!-- Sous-total -->
+        <div class="flex justify-between text-sm mt-4 pt-4 border-t">
+            <span class="text-gray-600">Sous-total</span>
+            <span>{{ number_format($total, 0, ',', ' ') }} FCFA</span>
+        </div>
+        
+        <!-- Frais de service (5%) -->
+        @php
+            $frais = $total * 0.05;
+            $totalAvecFrais = $total + $frais;
+        @endphp
+        <div class="flex justify-between text-sm mt-2">
+            <span class="text-gray-600">Frais de service (5%)</span>
+            <span>{{ number_format($frais, 0, ',', ' ') }} FCFA</span>
+        </div>
+        
+        <!-- Total final -->
+        <div class="flex justify-between font-bold text-lg mt-4 pt-4 border-t">
+            <span>Total</span>
+            <span class="text-red-500">{{ number_format($totalAvecFrais, 0, ',', ' ') }} FCFA</span>
+        </div>
                     
                     <button type="submit" id="submitBtnDesktop" class="hidden md:block w-full bg-red-500 text-white py-4 rounded-lg text-lg font-bold hover:bg-red-700 transition mt-6">
                         Passer la commande

@@ -139,11 +139,27 @@ Mon Panier
                 </div>
             @endforeach
             
-            <!-- Total Mobile -->
+            <!-- Total Mobile avec frais -->
+            @php
+                $frais = $total * 0.05;
+                $totalAvecFrais = $total + $frais;
+            @endphp
+            
             <div class="bg-white rounded-lg shadow-sm p-4">
-                <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">Total</span>
-                    <span class="text-xl font-bold text-primary-red">{{ number_format($total, 0, ',', ' ') }} FCFA</span>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Sous-total</span>
+                        <span class="font-medium">{{ number_format($total, 0, ',', ' ') }} FCFA</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Frais de service (5%)</span>
+                        <span class="font-medium text-orange-500">{{ number_format($frais, 0, ',', ' ') }} FCFA</span>
+                    </div>
+                    <div class="border-t border-gray-200 my-2"></div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold">Total</span>
+                        <span class="text-xl font-bold text-primary-red">{{ number_format($totalAvecFrais, 0, ',', ' ') }} FCFA</span>
+                    </div>
                 </div>
             </div>
             

@@ -16,12 +16,14 @@ class Commande extends Model
         'statut',
         'statut_paiement',
         'sous_total',
+            'frais',        // ← AJOUTER
         'total',
         'cart_token',
     ];
 
     protected $casts = [
         'sous_total' => 'decimal:2',
+            'frais' => 'decimal:2',  // ← AJOUTER
         'total' => 'decimal:2',
     ];
 

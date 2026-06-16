@@ -119,7 +119,11 @@
                 <div class="space-y-2 mb-6">
                     <div class="flex justify-between items-center">
                         <span class="text-gray-600 text-sm">Sous-total</span>
-                        <span class="font-medium text-sm">{{ number_format($commande->total, 0, ',', ' ') }} FCFA</span>
+                        <span class="font-medium text-sm">{{ number_format($commande->sous_total, 0, ',', ' ') }} FCFA</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600 text-sm">Frais de service (5%)</span>
+                        <span class="font-medium text-sm text-orange-500">{{ number_format($commande->frais, 0, ',', ' ') }} FCFA</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-gray-600 text-sm">Livraison</span>

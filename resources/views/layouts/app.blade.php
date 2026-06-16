@@ -148,6 +148,37 @@
             justify-content: center;
             font-weight: bold;
         }
+
+            /* 👇 AJOUTE CES CLASSES 👇 */
+    .bg-primary-dark {
+        background-color: #4D1111;
+    }
+    
+    .bg-primary-red {
+        background-color: #E81E25;
+    }
+    
+    .text-primary-dark {
+        color: #4D1111;
+    }
+    
+    .text-primary-red {
+        color: #E81E25;
+    }
+    
+    .bg-dark-bg {
+        background-color: #181A1C;
+    }
+    
+    .text-light-gray {
+        color: #D3D4D2;
+    }
+    
+    .border-primary-red {
+        border-color: #E81E25;
+    }
+    /* 👆 FIN DES AJOUTS 👆 */
+    
     </style>
 </head>
 <body>
@@ -212,6 +243,21 @@
     </div>
     <span class="hidden md:inline text-sm">Messages</span>
 </a>
+
+
+    <!-- Icône Matchs (admin seulement) -->
+    @auth
+        @if(Auth::user()->isAdmin())
+            <a href="{{ route('admin.matchs.index') }}" class="flex items-center space-x-1 text-gray-700 hover:text-primary-red">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="hidden md:inline text-sm">Matchs</span>
+            </a>
+        @endif
+    @endauth
+
     
     <a href="{{ Auth::check() ? route('account') : route('login') }}" class="flex items-center space-x-1 text-gray-700 hover:text-primary-red">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -272,7 +318,7 @@
     </main>
 <!-- Mobile Navigation -->
 <nav class="navbar-mobile md:hidden">
-    <div class="grid grid-cols-4 py-2">
+    <div class="grid grid-cols-5 py-2">
         @auth
             @if(Auth::user()->isAdmin())
                 <a href="{{ route('admin.dashboard') }}" class="flex flex-col items-center {{ request()->routeIs('admin.dashboard') ? 'text-primary-red' : 'text-gray-600' }}">
@@ -300,8 +346,15 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
-                    <span class="text-xs mt-1">Mon compte</span>
+                    <span class="text-xs mt-1">Compte</span>
                 </a>
+                <!-- Bouton Menu -->
+                <button onclick="toggleMobileMenu()" class="flex flex-col items-center text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                    <span class="text-xs mt-1">Menu</span>
+                </button>
             @else
                 <a href="{{ route('home') }}" class="flex flex-col items-center {{ request()->routeIs('home') ? 'text-primary-red' : 'text-gray-600' }}">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -309,7 +362,7 @@
                     </svg>
                     <span class="text-xs mt-1">Accueil</span>
                 </a>
-                <a href="{{ route('cart.index') }}" class="flex flex-col items-center {{ request()->routeIs('cart.*') ? 'text-primary-red' : 'text-gray-600' }}">
+                <a href="{{ route('commandes.index') }}" class="flex flex-col items-center {{ request()->routeIs('commandes.*') ? 'text-primary-red' : 'text-gray-600' }}">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                     </svg>
@@ -328,8 +381,15 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
-                    <span class="text-xs mt-1">Mon compte</span>
+                    <span class="text-xs mt-1">Compte</span>
                 </a>
+                <!-- Bouton Menu -->
+                <button onclick="toggleMobileMenu()" class="flex flex-col items-center text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                    <span class="text-xs mt-1">Menu</span>
+                </button>
             @endif
         @else
             <a href="{{ route('home') }}" class="flex flex-col items-center {{ request()->routeIs('home') ? 'text-primary-red' : 'text-gray-600' }}">
@@ -359,9 +419,73 @@
                 </svg>
                 <span class="text-xs mt-1">Connexion</span>
             </a>
+            <!-- Bouton Menu -->
+            <button onclick="toggleMobileMenu()" class="flex flex-col items-center text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+                <span class="text-xs mt-1">Menu</span>
+            </button>
         @endauth
     </div>
 </nav>
+
+<!-- Menu Mobile Overlay -->
+<div id="mobile-menu-overlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color:rgba(0,0,0,0.5); z-index:60;" onclick="toggleMobileMenu()">
+    <div class="absolute bottom-16 left-0 right-0 bg-white rounded-t-2xl p-6" onclick="event.stopPropagation()">
+        <div class="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-6"></div>
+        <div class="space-y-4">
+            <a href="{{ route('matchs') }}" class="flex items-center space-x-4 p-4 rounded-lg hover:bg-gray-50 transition">
+                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-primary-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <span class="block font-semibold text-gray-800">Matchs</span>
+                    <span class="text-sm text-gray-500">Résultats et calendrier de l'ASC</span>
+                </div>
+            </a>
+            
+            <a href="{{ route('about') }}" class="flex items-center space-x-4 p-4 rounded-lg hover:bg-gray-50 transition">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <span class="block font-semibold text-gray-800">À propos</span>
+                    <span class="text-sm text-gray-500">Notre histoire et nos valeurs</span>
+                </div>
+            </a>
+            
+            <a href="{{ route('blog') }}" class="flex items-center space-x-4 p-4 rounded-lg hover:bg-gray-50 transition">
+                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <span class="block font-semibold text-gray-800">Blog</span>
+                    <span class="text-sm text-gray-500">Actualités et articles</span>
+                </div>
+            </a>
+            
+            <a href="{{ route('contact') }}" class="flex items-center space-x-4 p-4 rounded-lg hover:bg-gray-50 transition">
+                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <span class="block font-semibold text-gray-800">Contact</span>
+                    <span class="text-sm text-gray-500">Nous contacter</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
 
 <!-- Footer -->
 <footer class="bg-dark-bg text-white mt-12 hidden md:block">
@@ -482,6 +606,19 @@ fetch('/messages/unread-count', {
     })
     .catch(error => console.error('Erreur:', error));
 @endauth
+</script>
+
+<script>
+function toggleMobileMenu() {
+    const overlay = document.getElementById('mobile-menu-overlay');
+    if (overlay.style.display === 'none' || overlay.style.display === '') {
+        overlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    } else {
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
 </script>
 @yield('scripts')
 </body>

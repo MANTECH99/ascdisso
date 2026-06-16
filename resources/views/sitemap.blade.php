@@ -1,14 +1,45 @@
 <?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
+    <!-- ========== Pages Principales ========== -->
+    
     <!-- Page d'accueil -->
     <url>
         <loc>{{ url('/') }}</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
+
+    <!-- À propos -->
+    <url>
+        <loc>{{ route('about') }}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- Blog -->
+    <url>
+        <loc>{{ route('blog') }}</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Contact -->
+    <url>
+        <loc>{{ route('contact') }}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <!-- Matchs (liste) -->
+    <url>
+        <loc>{{ route('matchs') }}</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- ========== Catégories ========== -->
     
-    <!-- Catégories -->
     @foreach($categories as $category)
     <url>
         <loc>{{ route('category.show', $category->slug) }}</loc>
@@ -18,7 +49,8 @@
     </url>
     @endforeach
     
-    <!-- Produits avec SLUG -->
+    <!-- ========== Produits ========== -->
+    
     @foreach($products as $product)
     <url>
         <loc>{{ route('product.show', $product->slug) }}</loc>
