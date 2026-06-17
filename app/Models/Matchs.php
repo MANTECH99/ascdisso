@@ -70,16 +70,23 @@ class Matchs extends Model
         return $query->orderBy('date_match', 'desc');
     }
 
-    // Accesseurs
-    public function getDateFormateeAttribute()
-    {
-        return $this->date_match->isoFormat('D MMMM YYYY');
+// Modifier l'accesseur getDateFormateeAttribute
+public function getDateFormateeAttribute()
+{
+    if (!$this->date_match) {
+        return 'Date à déterminer';
     }
+    return $this->date_match->isoFormat('D MMMM YYYY');
+}
 
-    public function getHeureAttribute()
-    {
-        return $this->date_match->format('H:i');
+// Modifier l'accesseur getHeureAttribute
+public function getHeureAttribute()
+{
+    if (!$this->date_match) {
+        return '--:--';
     }
+    return $this->date_match->format('H:i');
+}
 
     public function getScoreAttribute()
     {
@@ -159,4 +166,17 @@ public function getLogoExterieurUrlAttribute()
     
     return null;
 }
+
+// Dans app/Models/Matchs.php
+
+public function scopeSansDate($query)
+{
+    return $query->whereNull('date_match');
+}
+
+public function scopeAvecDate($query)
+{
+    return $query->whereNotNull('date_match');
+}
+
 }

@@ -34,19 +34,21 @@
 
             <div class="grid md:grid-cols-2 gap-6">
                 <!-- Date du match -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Date et heure du match *
-                    </label>
-                    <input type="datetime-local" 
-                           name="date_match" 
-                           value="{{ old('date_match', $isEdit ? $match->date_match->format('Y-m-d\TH:i') : '') }}"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-red @error('date_match') border-red-500 @enderror"
-                           required>
-                    @error('date_match')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+
+<div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">
+        Date et heure du match
+        <span class="text-xs text-gray-500">(Optionnel)</span>
+    </label>
+    <input type="datetime-local" 
+           name="date_match" 
+           value="{{ old('date_match', $isEdit && $match->date_match ? $match->date_match->format('Y-m-d\TH:i') : '') }}"
+           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-red @error('date_match') border-red-500 @enderror">
+    <p class="text-xs text-gray-500 mt-1">Laissez vide si la date n'est pas encore connue. "Date à déterminer" sera affiché.</p>
+    @error('date_match')
+        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+    @enderror
+</div>
 
                 <!-- Compétition -->
                 <div>
@@ -71,6 +73,9 @@
                         </option>
                         <option value="Match Amical" {{ old('competition', $isEdit ? $match->competition : '') == 'Match Amical' ? 'selected' : '' }}>
                             Match Amical
+                        </option>
+                        <option value="Saison Navétane 2026" {{ old('competition', $isEdit ? $match->competition : '') == 'Saison Navétane 2026' ? 'selected' : '' }}>
+                            Saison Navétane 2026
                         </option>
                     </select>
                     @error('competition')

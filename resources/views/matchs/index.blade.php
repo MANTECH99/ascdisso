@@ -94,12 +94,28 @@
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                             </svg>
-                            <span class="text-sm text-gray-600">{{ $match->date_formatee }}</span>
+                            @if($match->date_match)
+    <span class="text-sm text-gray-600">{{ $match->date_formatee }}</span>
+@else
+    <span class="text-sm text-orange-600 font-medium">📅 Date à déterminer</span>
+@endif
                         </div>
                         <span class="text-xs font-semibold text-gray-500 uppercase">{{ $match->competition }}</span>
                     </div>
                     
                     <div class="p-4">
+                            {{-- 👇 AJOUTER CES 8 LIGNES 👇 --}}
+    @if($match->statut === 'a_venir' && !$match->date_match)
+        <div class="flex justify-center mb-3">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-800">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Date à confirmer
+            </span>
+        </div>
+    @endif
+    {{-- 👆 FIN DE L'AJOUT 👆 --}}
                         <!-- Match en cours -->
                         @if($match->statut === 'en_cours')
                             <div class="flex justify-center mb-3">
@@ -136,7 +152,13 @@
                                 @if($match->statut === 'a_venir')
                                     <div class="text-center">
                                         <div class="text-2xl font-bold text-gray-400">VS</div>
-                                        <div class="text-sm text-gray-500 mt-1">{{ $match->heure }}</div>
+                                        <div class="text-sm text-gray-500 mt-1">
+    @if($match->date_match)
+        {{ $match->heure }}
+    @else
+        --:--
+    @endif
+</div>
                                     </div>
                                 @elseif($match->statut === 'en_cours')
                                     <div class="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl px-6 py-3">
