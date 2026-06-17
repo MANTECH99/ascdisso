@@ -45,8 +45,8 @@
                 <div class="absolute inset-0 bg-black bg-opacity-60"></div>
                 <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8">
                     <span class="bg-primary-red text-white text-xs font-bold px-3 py-1 rounded-full">Matchs</span>
-                    <h2 class="text-2xl md:text-3xl font-bold text-white mt-4 mb-2">Résumé du dernier match : Victoire éclatante de l'ASC Disso</h2>
-                    <p class="text-white opacity-75 mb-4 hidden md:block">Retour sur la performance exceptionnelle de notre équipe ce weekend...</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white mt-4 mb-2">Résumé de la dernière réunion : Préparation de la nouvelle saison</h2>
+                    <p class="text-white opacity-75 mb-4 hidden md:block">Le comité s'est réuni pour planifier les prochains événements du club...</p>
                     <div class="flex items-center text-white text-sm opacity-60">
                         <span>15 Juin 2026</span>
                         <span class="mx-2">•</span>
@@ -70,8 +70,8 @@
                         <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Club</span>
                         <span class="text-gray-400 text-xs">12 Juin 2026</span>
                     </div>
-                    <h3 class="font-bold text-lg mb-2 hover:text-primary-red transition">L'ASC Disso lance son centre de formation</h3>
-                    <p class="text-gray-600 text-sm mb-4">Un nouveau centre pour former les talents de demain ouvre ses portes à Mboro...</p>
+                    <h3 class="font-bold text-lg mb-2 hover:text-primary-red transition">C'est parti pour la nouvelle saison !</h3>
+                    <p class="text-gray-600 text-sm mb-4">L'ASC Disso attaque sa saison avec un effectif renforcé et des objectifs élevés...</p>
                     <a href="#" class="text-primary-red font-semibold text-sm hover:underline">Lire la suite →</a>
                 </div>
             </article>
