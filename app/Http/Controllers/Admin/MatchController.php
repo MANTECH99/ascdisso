@@ -37,11 +37,11 @@ class MatchController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'date_match' => 'required|date',
+            'date_match' => 'nullable|date',  // Changer required en nullable
             'competition' => 'required|string|max:255',
             'equipe_domicile' => 'required|string|max:255',
             'logo_domicile' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', // 👈 Ajoutez
-            'equipe_exterieur' => 'required|string|max:255',
+            'equipe_exterieur' => 'nullable|string|max:255',  // required devient nullable
             'logo_exterieur' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', // 👈 Ajoutez
             'score_domicile' => 'nullable|integer|min:0',
             'score_exterieur' => 'nullable|integer|min:0',
@@ -97,11 +97,11 @@ class MatchController extends Controller
         $match = Matchs::findOrFail($id);
 
         $validated = $request->validate([
-            'date_match' => 'required|date',
+            'date_match' => 'nullable|date',  // Changer required en nullable
             'competition' => 'required|string|max:255',
             'equipe_domicile' => 'required|string|max:255',
             'logo_domicile' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', // 👈 Ajoutez
-            'equipe_exterieur' => 'required|string|max:255',
+            'equipe_exterieur' => 'nullable|string|max:255',  // required devient nullable
             'logo_exterieur' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', // 👈 Ajoutez
             'score_domicile' => 'nullable|integer|min:0',
             'score_exterieur' => 'nullable|integer|min:0',

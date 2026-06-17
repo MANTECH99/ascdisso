@@ -179,4 +179,9 @@ public function scopeAvecDate($query)
     return $query->whereNotNull('date_match');
 }
 
+
+public function getEquipeExterieurAttribute($value)
+{
+    return $value ?? 'À déterminer';
+}
 }

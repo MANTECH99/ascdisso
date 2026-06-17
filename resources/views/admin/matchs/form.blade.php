@@ -113,16 +113,16 @@
     <p class="text-xs text-gray-500 mt-1">Format carré recommandé (PNG, JPG). Max 2Mo.</p>
 </div>
 
-{{-- Équipe extérieur --}}
 <div>
     <label class="block text-sm font-medium text-gray-700 mb-1">
-        Équipe extérieur *
+        Équipe extérieur
+        <span class="text-xs text-gray-500">(Optionnel)</span>
     </label>
     <input type="text" 
            name="equipe_exterieur" 
            value="{{ old('equipe_exterieur', $isEdit ? $match->equipe_exterieur : '') }}"
-           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-red"
-           required>
+           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-red">
+    <p class="text-xs text-gray-500 mt-1">Laissez vide si l'adversaire n'est pas encore connu.</p>
 </div>
 
 {{-- Logo extérieur --}}

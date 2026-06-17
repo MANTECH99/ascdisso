@@ -184,6 +184,11 @@
                  class="w-full h-full object-contain p-1">
         @elseif($match->equipe_exterieur === 'ASC Disso')
             <img src="{{ asset('images/logo.png') }}" alt="ASC Disso" class="w-12 h-12">
+        @elseif(!$match->equipe_exterieur || $match->equipe_exterieur === 'À déterminer')
+            {{-- 👇 NOUVEAU : Adversaire pas encore connu 👇 --}}
+            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                <span class="text-2xl font-bold text-orange-500">?</span>
+            </div>
         @else
             <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
                 <span class="text-lg font-bold text-gray-500">
@@ -192,7 +197,9 @@
             </div>
         @endif
     </div>
-    <h3 class="font-bold text-gray-800 text-sm">{{ $match->equipe_exterieur }}</h3>
+    <h3 class="font-bold text-gray-800 text-sm">
+        {{ $match->equipe_exterieur ?: 'À déterminer' }}
+    </h3>
 </div>
                         </div>
                         
