@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\CommandeController as AdminCommandeController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TwoFactorController;
+use App\Http\Controllers\ContactController;
+
 
 
 
@@ -237,6 +239,9 @@ Route::get('/contact', function ()
 {
     return view('contact');
 })->name('contact');
+
+// Route pour traiter l'envoi du formulaire
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 Route::get('/matchs', [App\Http\Controllers\MatchController::class, 'index'])->name('matchs');
 

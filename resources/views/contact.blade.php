@@ -110,7 +110,7 @@
                         </div>
                     @endif
 
-                    <form action="#" method="POST" class="space-y-6">
+                    <form action="{{ route('contact.send') }}" method="POST" class="space-y-6">
                         @csrf
                         
                         <div class="grid md:grid-cols-2 gap-6">
