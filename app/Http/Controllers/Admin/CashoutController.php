@@ -240,23 +240,15 @@ private function formatPhone($phone)
 private function getBalance()
 {
     try {
-        $apiKey = config('services.dexchange.api_key');
-        $baseUrl = config('services.dexchange.api_url');
-        $subMerchantId = config('services.dexchange.sub_merchant_id');
-        $parsedUrl = parse_url($baseUrl);
-        $baseApiUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
-        
-        $response = Http::timeout(30)
-            ->withOptions(['verify' => false])
-            ->withHeaders([
-                'Authorization' => 'Bearer ' . $apiKey,
-                'Accept' => 'application/json',
-            ])->get($baseApiUrl . '/api/v1/sub-merchant/' . $subMerchantId);
-        
-        $data = $response->json();
-Log::info('SubMerchant Balance Response:', ['data' => $data]);
+        $recharges = CashoutLog::whereIn('service_code', ['OM_SN_CASHOUT', 'WAVE_SN_CASHOUT', 'FM_SN_CASHOUT', 'WIZALL_SN_CASHOUT'])
+            ->where('status', 'success')
+            ->sum('amount');
 
-return $data['data']['balance'] ?? $data['balance'] ?? null;
+        $retraits = CashoutLog::whereIn('service_code', ['OM_SN_CASHIN', 'WAVE_SN_CASHIN', 'FM_SN_CASHIN', 'WIZALL_SN_CASHIN'])
+            ->where('status', 'success')
+            ->sum('amount');
+
+        return ($recharges * 0.985) - ($retraits * 1.015);
         
     } catch (\Exception $e) {
         return null;
