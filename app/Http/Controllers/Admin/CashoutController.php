@@ -254,8 +254,9 @@ private function getBalance()
             ])->get($baseApiUrl . '/api/v1/sub-merchant/' . $subMerchantId);
         
         $data = $response->json();
-        
-        return $data['data']['balance'] ?? null;
+Log::info('SubMerchant Balance Response:', ['data' => $data]);
+
+return $data['data']['balance'] ?? $data['balance'] ?? null;
         
     } catch (\Exception $e) {
         return null;
