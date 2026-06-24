@@ -67,6 +67,7 @@ class WavePaymentController extends Controller
                 'callBackURL' => secure_url('payment/callback'),
                 'successUrl' => secure_url('commande/recu/' . $commande->id),
                 'failureUrl' => secure_url('checkout') . '?payment=failed&method=' . $request->payment_method,
+                'sub_merchant_id' => config('services.dexchange.sub_merchant_id'), // ← AJOUTER
             ];
 
             Log::info('Payment Request Payload:', $payload);
@@ -243,7 +244,6 @@ public function handleCallback(Request $request)
                 // ← AJOUTER CECI
     CashoutLog::create([
         'admin_id' => null,
-        'site' => 'disso',
         'service_code' => $commande->mode_paiement === 'orange_money' ? 'OM_SN_CASHOUT' : 'WAVE_SN_CASHOUT',
         'phone' => $commande->telephone,
         'amount' => $commande->total,

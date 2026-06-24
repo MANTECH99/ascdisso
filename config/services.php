@@ -15,11 +15,12 @@ return [
     */
 
 
-    'dexchange' => [
-        'api_key' => env('DEXCHANGE_API_KEY'),
-        'api_url' => env('DEXCHANGE_API_URL'),
-        'balance_url' => env('DEXCHANGE_BALANCE_URL', 'https://api.dexchange.com/api/v1/api-services/balance'),
-    ],
+'dexchange' => [
+    'api_key' => env('DEXCHANGE_API_KEY'),
+    'api_url' => env('DEXCHANGE_API_URL'),
+    'balance_url' => env('DEXCHANGE_BALANCE_URL', 'https://api.dexchange.com/api/v1/api-services/balance'),
+    'sub_merchant_id' => env('DEXCHANGE_SUB_MERCHANT_ID'),
+],
 
 
     'whatsapp' => [

@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\NotificationController as AdminNotificationContro
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\SubMerchantController;
+
 
 
 
@@ -158,6 +160,14 @@ Route::middleware(['auth', 'superadmin','2fa'])->prefix('admin')->name('admin.')
         ->name('cashout.index');
     Route::post('/cashout', [App\Http\Controllers\Admin\CashoutController::class, 'initiate'])
         ->name('cashout.initiate');
+
+            // Sous-marchands
+    Route::get('/sub-merchants', [SubMerchantController::class, 'index'])->name('sub-merchants.index');
+    Route::get('/sub-merchants/create', [SubMerchantController::class, 'create'])->name('sub-merchants.create');
+    Route::post('/sub-merchants', [SubMerchantController::class, 'store'])->name('sub-merchants.store');
+    Route::get('/sub-merchants/{subMerchant}/edit', [SubMerchantController::class, 'edit'])->name('sub-merchants.edit');
+    Route::put('/sub-merchants/{subMerchant}', [SubMerchantController::class, 'update'])->name('sub-merchants.update');
+    Route::post('/sub-merchants/{subMerchant}/toggle', [SubMerchantController::class, 'toggle'])->name('sub-merchants.toggle');
 });
 
 // Callback hors middleware (appelé par Dexchange)

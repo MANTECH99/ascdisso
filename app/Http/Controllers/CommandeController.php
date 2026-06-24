@@ -138,10 +138,15 @@ class CommandeController extends Controller
             }
         }
 
-                // AJOUTER : Calcul des frais de 5%
-        $fraisPourcentage = 5; // 5%
+// MODIFIÉ : Calcul des frais uniquement pour les paiements électroniques
+    $fraisMontant = 0;
+    $fraisPourcentage = 5; // 5%
+    
+    if (in_array($request->mode_paiement, ['wave', 'orange_money'])) {
         $fraisMontant = $sousTotal * ($fraisPourcentage / 100);
-        $totalAvecFrais = $sousTotal + $fraisMontant;
+    }
+    
+    $totalAvecFrais = $sousTotal + $fraisMontant;
 
         // Créer la commande
         $commande = Commande::create([

@@ -205,6 +205,12 @@
                         <span class="mr-3 text-lg">💰</span> Cashout
                     </a>
                 </div>
+                <div>
+    <a href="{{ route('admin.sub-merchants.index') }}" 
+       class="nav-link {{ request()->routeIs('admin.sub-merchants.*') ? 'active' : '' }}">
+        <span class="mr-3 text-lg">🏪</span> Sous-marchands
+    </a>
+</div>
 <div>
     <a href="#" onclick="prompt2FA(event)" 
        class="nav-link">

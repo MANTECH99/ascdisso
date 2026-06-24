@@ -11,13 +11,9 @@ use Illuminate\Support\Facades\Log;
 class CashoutController extends Controller
 {
 
-    private $site = 'disso';
-    private $prefix = 'ASCDISSO-';
-
 public function index()
     {
-        $logs = CashoutLog::where('external_id', 'like', $this->prefix . '%')
-            ->latest()->paginate(20);
+        $logs = CashoutLog::latest()->paginate(20);
         $balance = $this->getBalance();
         
         return view('admin.cashout.index', compact('logs', 'balance'));
@@ -57,7 +53,7 @@ if (($request->amount * 1.015) > $soldeDisponible) {
     $apiKey = config('services.dexchange.api_key');
     $apiUrl = config('services.dexchange.api_url');
 
-$externalId = $this->prefix . 'CASHOUT-' . time();
+$externalId = 'ASCDISSO-CASHOUT-' . time();
 
     $payload = [
         'externalTransactionId' => $externalId,
@@ -67,6 +63,7 @@ $externalId = $this->prefix . 'CASHOUT-' . time();
         'callBackURL' => secure_url('admin/cashout/callback'),
         'successUrl' => secure_url('admin/cashout'),
         'failureUrl' => secure_url('admin/cashout'),
+        'sub_merchant_id' => config('services.dexchange.sub_merchant_id'), // ← AJOUTER
     ];
 
     Log::info('Cashout Request:', $payload);
@@ -112,7 +109,6 @@ $externalId = $this->prefix . 'CASHOUT-' . time();
 
         CashoutLog::create([
             'admin_id' => auth()->id(),
-            'site' => $this->site,  // ← 3. AJOUTÉ
             'service_code' => $request->service,
             'phone' => $phone,
             'amount' => $request->amount,
@@ -185,7 +181,6 @@ return back()->with('error', '❌ ' . $errorMsg);
         try {
             CashoutLog::create([
                 'admin_id' => auth()->id(),
-                'site' => $this->site,  // ← 3. AJOUTÉ
                 'service_code' => $request->service,
                 'phone' => $phone,
                 'amount' => $request->amount,
@@ -242,44 +237,30 @@ private function formatPhone($phone)
     return null;
 }
 
-    private function getBalance()  // ← 4. REMPLACÉ
-    {
-        try {
-            $apiKey = config('services.dexchange.api_key');
-            $baseUrl = config('services.dexchange.api_url');
-            $parsedUrl = parse_url($baseUrl);
-            $baseApiUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
-            $balanceUrl = $baseApiUrl . '/api/v1/api-services/balance';
-            
-            $response = Http::timeout(30)
-                ->withOptions(['verify' => false])
-                ->withHeaders([
-                    'Authorization' => 'Bearer ' . $apiKey,
-                    'Accept' => 'application/json',
-                ])->get($balanceUrl);
-            
-            $data = $response->json();
-            
-            $totalBalance = $data['balance']['balances'][0]['BALANCE'] 
-                         ?? $data['balance']['balance'] 
-                         ?? 0;
-
-            $recharges = CashoutLog::where('external_id', 'like', $this->prefix . '%')
-                ->whereIn('service_code', ['OM_SN_CASHOUT', 'WAVE_SN_CASHOUT', 'FM_SN_CASHOUT', 'WIZALL_SN_CASHOUT'])
-                ->where('status', 'success')
-                ->sum('amount');
-
-            $retraits = CashoutLog::where('external_id', 'like', $this->prefix . '%')
-                ->whereIn('service_code', ['OM_SN_CASHIN', 'WAVE_SN_CASHIN', 'FM_SN_CASHIN', 'WIZALL_SN_CASHIN'])
-                ->where('status', 'success')
-                ->sum('amount');
-
-            return ($recharges * 0.985) - ($retraits * 1.015);
-            
-        } catch (\Exception $e) {
-            return null;
-        }
+private function getBalance()
+{
+    try {
+        $apiKey = config('services.dexchange.api_key');
+        $baseUrl = config('services.dexchange.api_url');
+        $subMerchantId = config('services.dexchange.sub_merchant_id');
+        $parsedUrl = parse_url($baseUrl);
+        $baseApiUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+        
+        $response = Http::timeout(30)
+            ->withOptions(['verify' => false])
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $apiKey,
+                'Accept' => 'application/json',
+            ])->get($baseApiUrl . '/api/v1/sub-merchant/' . $subMerchantId);
+        
+        $data = $response->json();
+        
+        return $data['data']['balance'] ?? null;
+        
+    } catch (\Exception $e) {
+        return null;
     }
+}
 
 public function checkStatus($transactionId)
 {

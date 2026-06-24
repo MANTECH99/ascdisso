@@ -116,27 +116,23 @@
                         @endforeach
                     </div>
                     
-        <!-- Sous-total -->
-        <div class="flex justify-between text-sm mt-4 pt-4 border-t">
-            <span class="text-gray-600">Sous-total</span>
-            <span>{{ number_format($total, 0, ',', ' ') }} FCFA</span>
-        </div>
-        
-        <!-- Frais de service (5%) -->
-        @php
-            $frais = $total * 0.05;
-            $totalAvecFrais = $total + $frais;
-        @endphp
-        <div class="flex justify-between text-sm mt-2">
-            <span class="text-gray-600">Frais de service (5%)</span>
-            <span>{{ number_format($frais, 0, ',', ' ') }} FCFA</span>
-        </div>
-        
-        <!-- Total final -->
-        <div class="flex justify-between font-bold text-lg mt-4 pt-4 border-t">
-            <span>Total</span>
-            <span class="text-red-500">{{ number_format($totalAvecFrais, 0, ',', ' ') }} FCFA</span>
-        </div>
+<!-- Sous-total -->
+<div class="flex justify-between text-sm mt-4 pt-4 border-t">
+    <span class="text-gray-600">Sous-total</span>
+    <span id="sousTotal">{{ number_format($total, 0, ',', ' ') }} FCFA</span>
+</div>
+
+<!-- Frais de service (5%) - Affiché uniquement pour Wave et Orange Money -->
+<div id="fraisBlock" class="flex justify-between text-sm mt-2 hidden">
+    <span class="text-gray-600">Frais de service (5%)</span>
+    <span id="fraisMontant">{{ number_format($total * 0.05, 0, ',', ' ') }} FCFA</span>
+</div>
+
+<!-- Total final -->
+<div class="flex justify-between font-bold text-lg mt-4 pt-4 border-t">
+    <span>Total</span>
+    <span id="totalFinal" class="text-red-500">{{ number_format($total, 0, ',', ' ') }} FCFA</span>
+</div>
                     
                     <button type="submit" id="submitBtnDesktop" class="hidden md:block w-full bg-red-500 text-white py-4 rounded-lg text-lg font-bold hover:bg-red-700 transition mt-6">
                         Passer la commande
@@ -286,6 +282,40 @@ document.addEventListener('DOMContentLoaded', function() {
     if (defaultOption) {
         defaultOption.classList.add('selected');
     }
+
+
+    // Mise à jour des frais selon le mode de paiement
+const fraisBlock = document.getElementById('fraisBlock');
+const totalFinal = document.getElementById('totalFinal');
+const sousTotal = {{ $total }};
+
+function updateTotal(modePaiement) {
+    if (modePaiement === 'wave' || modePaiement === 'orange_money') {
+        fraisBlock.classList.remove('hidden');
+        const frais = sousTotal * 0.05;
+        totalFinal.textContent = new Intl.NumberFormat('fr-FR').format(sousTotal + frais) + ' FCFA';
+    } else {
+        fraisBlock.classList.add('hidden');
+        totalFinal.textContent = new Intl.NumberFormat('fr-FR').format(sousTotal) + ' FCFA';
+    }
+}
+
+// Écouter le clic sur chaque option de paiement
+document.querySelectorAll('.payment-option').forEach(option => {
+    option.addEventListener('click', function() {
+        const radio = this.querySelector('input[type="radio"]');
+        if (radio) {
+            updateTotal(radio.value);
+        }
+    });
+});
+
+// Écouter aussi le change sur les radios (au cas où)
+document.querySelectorAll('input[name="mode_paiement"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        updateTotal(this.value);
+    });
+});
     
     form.addEventListener('submit', function(e) {
         const modePaiement = document.querySelector('input[name="mode_paiement"]:checked').value;
