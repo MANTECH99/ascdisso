@@ -688,15 +688,11 @@ document.addEventListener('click', function(event) {
 });
 </script>
 
-<!-- PWA Installation et Service Worker -->
 <script>
-// Variables globales PWA
 let deferredPrompt;
 let pwaInstallButton;
 
-// Créer le bouton d'installation PWA
 function createInstallButton() {
-    // Vérifier si le bouton existe déjà
     if (document.getElementById('pwa-install-button')) return;
     
     pwaInstallButton = document.createElement('button');
@@ -710,197 +706,63 @@ function createInstallButton() {
         <span>Installer l'app</span>
     `;
     
-    // Styles du bouton
     Object.assign(pwaInstallButton.style, {
-        position: 'fixed',
-        bottom: '90px',
-        right: '20px',
-        zIndex: '9999',
-        background: '#E81E25',
-        color: 'white',
-        padding: '12px 24px',
-        border: 'none',
-        borderRadius: '50px',
-        boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-        cursor: 'pointer',
-        display: 'none',
-        alignItems: 'center',
-        gap: '8px',
-        fontWeight: 'bold',
-        fontSize: '14px',
-        animation: 'slideUpPWA 0.3s ease-out',
-        fontFamily: 'inherit',
-        transition: 'transform 0.2s, box-shadow 0.2s'
+        position: 'fixed', bottom: '90px', right: '20px', zIndex: '9999',
+        background: '#E81E25', color: 'white', padding: '12px 24px',
+        border: 'none', borderRadius: '50px',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.3)', cursor: 'pointer',
+        display: 'none', alignItems: 'center', gap: '8px',
+        fontWeight: 'bold', fontSize: '14px', fontFamily: 'inherit'
     });
     
-    // Effet hover
-    pwaInstallButton.onmouseover = () => {
-        pwaInstallButton.style.transform = 'translateY(-2px)';
-        pwaInstallButton.style.boxShadow = '0 6px 20px rgba(232,30,37,0.4)';
-    };
-    pwaInstallButton.onmouseout = () => {
-        pwaInstallButton.style.transform = 'translateY(0)';
-        pwaInstallButton.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
-    };
+    pwaInstallButton.onmouseover = () => { pwaInstallButton.style.transform = 'translateY(-2px)'; };
+    pwaInstallButton.onmouseout = () => { pwaInstallButton.style.transform = 'translateY(0)'; };
     
     document.body.appendChild(pwaInstallButton);
-    
-    // Ajouter le style d'animation
-    if (!document.getElementById('pwa-styles')) {
-        const styleEl = document.createElement('style');
-        styleEl.id = 'pwa-styles';
-        styleEl.textContent = `
-            @keyframes slideUpPWA {
-                from {
-                    transform: translateY(100px);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateY(0);
-                    opacity: 1;
-                }
-            }
-            
-            @media (min-width: 768px) {
-                #pwa-install-button {
-                    bottom: 30px;
-                    right: 30px;
-                }
-            }
-            
-            @media (max-width: 767px) {
-                #pwa-install-button {
-                    bottom: 80px;
-                    right: 16px;
-                    padding: 10px 20px;
-                    font-size: 13px;
-                }
-            }
-        `;
-        document.head.appendChild(styleEl);
-    }
 }
 
-// Gérer l'événement d'installation
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Empêcher l'affichage automatique du prompt
     e.preventDefault();
-    // Stocker l'événement
     deferredPrompt = e;
-    // Créer et afficher le bouton
     createInstallButton();
-    if (pwaInstallButton) {
-        pwaInstallButton.style.display = 'flex';
-    }
-    
-    // Analytics (optionnel)
-    console.log('✅ PWA est installable');
+    if (pwaInstallButton) pwaInstallButton.style.display = 'flex';
 });
 
-// Gérer le clic sur le bouton d'installation
 document.addEventListener('click', async (e) => {
     if (e.target.closest('#pwa-install-button') && deferredPrompt) {
-        // Afficher le prompt d'installation
         deferredPrompt.prompt();
-        
-        // Attendre la réponse
-        const { outcome } = await deferredPrompt.userChoice;
-        
-        console.log(`Résultat installation: ${outcome}`);
-        
-        // Analytics (optionnel)
-        if (outcome === 'accepted') {
-            console.log('✅ Utilisateur a installé l\'application');
-        } else {
-            console.log('❌ Utilisateur a refusé l\'installation');
-        }
-        
-        // Nettoyer
+        await deferredPrompt.userChoice;
         deferredPrompt = null;
-        if (pwaInstallButton) {
-            pwaInstallButton.style.display = 'none';
-        }
+        if (pwaInstallButton) pwaInstallButton.style.display = 'none';
     }
 });
 
-// Détecter si l'app est déjà installée
 window.addEventListener('appinstalled', () => {
-    console.log('🎉 Application installée avec succès');
-    if (pwaInstallButton) {
-        pwaInstallButton.style.display = 'none';
-    }
-    // Optionnel : Afficher un message de confirmation
+    if (pwaInstallButton) pwaInstallButton.style.display = 'none';
 });
 
-// Vérifier le mode d'affichage
-if (window.matchMedia('(display-mode: standalone)').matches) {
-    console.log('📱 Mode application (standalone)');
-}
-
-// Enregistrement du Service Worker
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
             .then(registration => {
-                console.log('✅ Service Worker enregistré:', registration.scope);
-                
-                // Vérifier les mises à jour
                 registration.addEventListener('updatefound', () => {
                     const newWorker = registration.installing;
-                    console.log('🔄 Nouveau Service Worker trouvé');
-                    
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            console.log('🆕 Nouveau contenu disponible');
-                            
-                            // Afficher une notification pour l'utilisateur
                             const updateBanner = document.createElement('div');
-                            updateBanner.style.cssText = `
-                                position: fixed;
-                                top: 0;
-                                left: 0;
-                                right: 0;
-                                background: #E81E25;
-                                color: white;
-                                padding: 12px;
-                                text-align: center;
-                                z-index: 10000;
-                                font-weight: bold;
-                            `;
-                            updateBanner.innerHTML = `
-                                Une nouvelle version est disponible ! 
-                                <button onclick="window.location.reload()" style="
-                                    background: white;
-                                    color: #E81E25;
-                                    border: none;
-                                    padding: 5px 15px;
-                                    border-radius: 20px;
-                                    margin-left: 10px;
-                                    cursor: pointer;
-                                    font-weight: bold;
-                                ">Mettre à jour</button>
-                            `;
+                            updateBanner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#E81E25;color:white;padding:12px;text-align:center;z-index:10000;font-weight:bold;';
+                            updateBanner.innerHTML = 'Une nouvelle version est disponible ! <button onclick="window.location.reload()" style="background:white;color:#E81E25;border:none;padding:5px 15px;border-radius:20px;margin-left:10px;cursor:pointer;font-weight:bold;">Mettre à jour</button>';
                             document.body.prepend(updateBanner);
                         }
                     });
                 });
-            })
-            .catch(error => {
-                console.error('❌ Erreur Service Worker:', error);
             });
     });
-    
-    // Gérer la perte de connexion
-    window.addEventListener('online', () => {
-        console.log('🌐 Connexion rétablie');
-        document.body.classList.remove('offline');
-    });
-    
-    window.addEventListener('offline', () => {
-        console.log('📡 Connexion perdue - Mode hors ligne');
-        document.body.classList.add('offline');
-    });
 }
+
+// AJOUTE JUSTE ÇA 👇
+window.addEventListener('online', () => document.body.classList.remove('offline'));
+window.addEventListener('offline', () => document.body.classList.add('offline'));
 </script>
 @yield('scripts')
 </body>
