@@ -44,8 +44,16 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
-    <link rel="manifest" href="{{ asset('site.webmanifest') }}"> <!-- 👈 AJOUTÉ -->
-    
+<link rel="manifest" href="{{ asset('images/site.webmanifest') }}">
+    <!-- PWA -->
+<link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
+
+<style>
+@media (display-mode: standalone) {
+    .header-top { padding-top: env(safe-area-inset-top, 0px); }
+    .navbar-mobile { padding-bottom: env(safe-area-inset-bottom, 0px); }
+}
+</style>
     <!-- Fallback -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     
@@ -678,6 +686,79 @@ document.addEventListener('click', function(event) {
         dropdownContent.classList.add('hidden');
     }
 });
+</script>
+
+<script>
+let deferredPrompt;
+let pwaInstallButton;
+
+function createInstallButton() {
+    if (document.getElementById('pwa-install-button')) return;
+    
+    pwaInstallButton = document.createElement('button');
+    pwaInstallButton.id = 'pwa-install-button';
+    pwaInstallButton.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Installer l'app</span>
+    `;
+    
+    Object.assign(pwaInstallButton.style, {
+        position: 'fixed', bottom: '90px', right: '20px', zIndex: '9999',
+        background: '#E81E25', color: 'white', padding: '12px 24px',
+        border: 'none', borderRadius: '50px',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.3)', cursor: 'pointer',
+        display: 'none', alignItems: 'center', gap: '8px',
+        fontWeight: 'bold', fontSize: '14px', fontFamily: 'inherit'
+    });
+    
+    pwaInstallButton.onmouseover = () => { pwaInstallButton.style.transform = 'translateY(-2px)'; };
+    pwaInstallButton.onmouseout = () => { pwaInstallButton.style.transform = 'translateY(0)'; };
+    
+    document.body.appendChild(pwaInstallButton);
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    createInstallButton();
+    if (pwaInstallButton) pwaInstallButton.style.display = 'flex';
+});
+
+document.addEventListener('click', async (e) => {
+    if (e.target.closest('#pwa-install-button') && deferredPrompt) {
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        if (pwaInstallButton) pwaInstallButton.style.display = 'none';
+    }
+});
+
+window.addEventListener('appinstalled', () => {
+    if (pwaInstallButton) pwaInstallButton.style.display = 'none';
+});
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then(registration => {
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            const updateBanner = document.createElement('div');
+                            updateBanner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#E81E25;color:white;padding:12px;text-align:center;z-index:10000;font-weight:bold;';
+                            updateBanner.innerHTML = 'Une nouvelle version est disponible ! <button onclick="window.location.reload()" style="background:white;color:#E81E25;border:none;padding:5px 15px;border-radius:20px;margin-left:10px;cursor:pointer;font-weight:bold;">Mettre à jour</button>';
+                            document.body.prepend(updateBanner);
+                        }
+                    });
+                });
+            });
+    });
+}
 </script>
 @yield('scripts')
 </body>

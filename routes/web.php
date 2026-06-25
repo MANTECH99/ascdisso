@@ -262,3 +262,8 @@ Route::post('/2fa/check-password', function (Request $request) {
     }
     return response()->json(['success' => false]);
 })->name('2fa.check-password');
+
+
+Route::get('/offline', function () {
+    return view('offline');
+})->name('offline');
