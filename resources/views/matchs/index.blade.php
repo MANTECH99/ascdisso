@@ -97,7 +97,7 @@
                             @if($match->date_match)
     <span class="text-sm text-gray-600">{{ $match->date_formatee }}</span>
 @else
-    <span class="text-sm text-orange-600 font-medium">📅 Date à déterminer</span>
+    <span class="text-sm text-orange-600 font-medium">📅 Date</span>
 @endif
                         </div>
                         <span class="text-xs font-semibold text-gray-500 uppercase">{{ $match->competition }}</span>
