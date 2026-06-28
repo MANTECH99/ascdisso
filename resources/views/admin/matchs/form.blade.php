@@ -74,7 +74,7 @@
                         <option value="Match Amical" {{ old('competition', $isEdit ? $match->competition : '') == 'Match Amical' ? 'selected' : '' }}>
                             Match Amical
                         </option>
-                        <option value="Saison Navétane 2026" {{ old('competition', $isEdit ? $match->competition : '') == 'Navétane 2026' ? 'selected' : '' }}>
+                        <option value="Navétane 2026" {{ old('competition', $isEdit ? $match->competition : '') == 'Navétane 2026' ? 'selected' : '' }}>
                             Saison Navétane 2026
                         </option>
                     </select>
