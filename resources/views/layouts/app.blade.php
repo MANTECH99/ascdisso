@@ -131,14 +131,14 @@
 }
 
 .onboarding-dot.active {
-    background-color: #FF7F50; /* Votre couleur de bouton */
+    background-color: #E81E25; /* Votre couleur de bouton */
 }
 
 /* Bouton large en bas */
 .onboarding-btn-primary {
     width: 100%;
     padding: 18px;
-    background-color: #FF7F50; /* Vous pouvez changer #FF7F50 par votre rouge #E81E25 si vous préférez */
+    background-color: #E81E25; /* Vous pouvez changer #FF7F50 par votre rouge #E81E25 si vous préférez */
     color: white;
     border: none;
     border-radius: 16px;
