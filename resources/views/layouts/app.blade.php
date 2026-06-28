@@ -49,6 +49,115 @@
 <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
 
 <style>
+
+    /* --- CSS ONBOARDING STYLE "AC RESTAURANT" (SANS PASSER) --- */
+.onboarding-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #FFFFFF;
+    z-index: 9999;
+    display: none;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    overflow-y: auto;
+}
+
+.onboarding-slide {
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    padding: 40px 30px 40px;
+    box-sizing: border-box;
+    text-align: center;
+    justify-content: space-between;
+}
+
+.onboarding-slide.active {
+    display: flex;
+}
+
+/* Grande illustration centrale */
+.onboarding-illustration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.onboarding-illustration img {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.05));
+}
+
+/* Contenu texte centré */
+.onboarding-text {
+    padding: 0 10px 30px 10px;
+}
+
+.onboarding-text h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1f2937;
+    margin: 0 0 10px 0;
+    letter-spacing: -0.5px;
+}
+
+.onboarding-text p {
+    font-size: 15px;
+    color: #9ca3af;
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 280px;
+}
+
+/* Pagination (petits points) */
+.onboarding-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 30px;
+}
+
+.onboarding-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.onboarding-dot.active {
+    background-color: #FF7F50; /* Votre couleur de bouton */
+}
+
+/* Bouton large en bas */
+.onboarding-btn-primary {
+    width: 100%;
+    padding: 18px;
+    background-color: #FF7F50; /* Vous pouvez changer #FF7F50 par votre rouge #E81E25 si vous préférez */
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(255, 127, 80, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.onboarding-btn-primary:active {
+    transform: scale(0.97);
+}
+/* --- FIN CSS --- */
+
+
+
+
 @media (display-mode: standalone) {
     .header-top { padding-top: env(safe-area-inset-top, 0px); }
     .navbar-mobile { padding-bottom: env(safe-area-inset-bottom, 0px); }
@@ -190,6 +299,71 @@
     </style>
 </head>
 <body>
+
+<!-- OVERLAY DE BIENVENUE -->
+<div class="onboarding-overlay" id="onboarding-overlay">
+    
+    <!-- SLIDE 1 -->
+    <div class="onboarding-slide active" id="slide-1">
+        <div class="onboarding-illustration">
+            <!-- 👇 METTEZ VOTRE IMAGE ICI 👇 -->
+            <img src="{{ asset('images/ma_premiere_images.png') }}" alt="Découvrez ASC Disso">
+        </div>
+        <div class="onboarding-text">
+            <h2>Bienvenue sur <strong>ASC Disso</strong></h2>
+            <p>Votre boutique en ligne de confiance au Sénégal. Maillots, mode, accessoires et plus encore.</p>
+        </div>
+        <div class="onboarding-actions">
+            <div class="onboarding-dots">
+                <span class="onboarding-dot active"></span>
+                <span class="onboarding-dot"></span>
+                <span class="onboarding-dot"></span>
+            </div>
+            <button class="onboarding-btn-primary" onclick="nextSlide(1)">SUIVANT</button>
+        </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="onboarding-slide" id="slide-2">
+        <div class="onboarding-illustration">
+            <!-- 👇 METTEZ VOTRE IMAGE ICI 👇 -->
+             <img src="{{ asset('images/ma_premiere_imagess.png') }}" alt="Découvrez ASC Disso">
+        </div>
+        <div class="onboarding-text">
+            <h2>Livraison <strong>Express</strong></h2>
+            <p>Recevez vos achats directement chez vous, en toute sécurité. Paiement Cash ou Wave.</p>
+        </div>
+        <div class="onboarding-actions">
+            <div class="onboarding-dots">
+                <span class="onboarding-dot"></span>
+                <span class="onboarding-dot active"></span>
+                <span class="onboarding-dot"></span>
+            </div>
+            <button class="onboarding-btn-primary" onclick="nextSlide(2)">SUIVANT</button>
+        </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="onboarding-slide" id="slide-3">
+        <div class="onboarding-illustration">
+            <!-- 👇 METTEZ VOTRE IMAGE ICI 👇 -->
+            <img src="{{ asset('images/ma_premiere_imagessss.png') }}" alt="Découvrez ASC Disso">
+        </div>
+        <div class="onboarding-text">
+            <h2>Le Shopping <strong>  Simplifié</strong></h2>
+            <p>Des promotions exclusives et une équipe à votre écoute pour vous satisfaire.</p>
+        </div>
+        <div class="onboarding-actions">
+            <div class="onboarding-dots">
+                <span class="onboarding-dot"></span>
+                <span class="onboarding-dot"></span>
+                <span class="onboarding-dot active"></span>
+            </div>
+            <button class="onboarding-btn-primary" onclick="closeOnboarding()">COMMENCER</button>
+        </div>
+    </div>
+
+</div>
     <!-- Header -->
     <header class="header-top shadow-sm sticky top-0 z-40">
 <div class="max-w-7xl mx-auto px-4 py-3">
@@ -765,5 +939,27 @@ window.addEventListener('online', () => document.body.classList.remove('offline'
 window.addEventListener('offline', () => document.body.classList.add('offline'));
 </script>
 @yield('scripts')
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Ne s'affiche que sur mobile et une seule fois par session
+    const hasSeenOnboarding = sessionStorage.getItem('asc_onboarding_seen');
+    if (window.innerWidth < 768 && !hasSeenOnboarding) {
+        document.getElementById('onboarding-overlay').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+});
+
+function nextSlide(currentIndex) {
+    document.getElementById('slide-' + currentIndex).classList.remove('active');
+    document.getElementById('slide-' + (currentIndex + 1)).classList.add('active');
+}
+
+function closeOnboarding() {
+    document.getElementById('onboarding-overlay').style.display = 'none';
+    document.body.style.overflow = '';
+    sessionStorage.setItem('asc_onboarding_seen', 'true');
+}
+</script>
 </body>
 </html>

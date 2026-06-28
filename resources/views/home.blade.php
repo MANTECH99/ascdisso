@@ -215,7 +215,7 @@
     
    <div class="mt-8">
     <div class="mb-4 px-4 py-2 w-full" style="background-color: #D3D4D2;">
-        <h2 class="text-lg font-bold mb-2">Découvrez  notre collection : Juillet</h2>
+        <h2 class="text-lg font-bold mb-2">Découvrez  notre collection dans</h2>
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-1">
                 <span class="text-xs"></span>
@@ -259,20 +259,17 @@
     
 <div class="mt-8">
 <div class="overflow-hidden" style="background-color: #D3D4D2;">
-    <div class="animate-slide-left-right flex whitespace-nowrap" style="width: max-content;">
+@php
+    $mois = \Carbon\Carbon::now()->locale('fr')->translatedFormat('F');
+@endphp
+
+<div class="animate-slide-left-right flex whitespace-nowrap" style="width: max-content;">
+    @for ($i = 0; $i < 4; $i++)
         <h2 class="text-xl font-bold px-4 py-2 inline-block">
-            Les meilleures offres en Mai
+            Les meilleures offres en {{ ucfirst($mois) }}
         </h2>
-        <h2 class="text-xl font-bold px-4 py-2 inline-block">
-            Les meilleures offres en Mai
-        </h2>
-        <h2 class="text-xl font-bold px-4 py-2 inline-block">
-            Les meilleures offres en Mai
-        </h2>
-        <h2 class="text-xl font-bold px-4 py-2 inline-block">
-            Les meilleures offres en Mai
-        </h2>
-    </div>
+    @endfor
+</div>
 </div>
     <div class="bg-white rounded-b-lg shadow-sm p-2">
         <div class="grid grid-cols-2 gap-2">
