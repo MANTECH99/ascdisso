@@ -64,7 +64,7 @@
 .onboarding-slide {
     display: none;
     flex-direction: column;
-    height: 100vh;
+    height: 100dvh; /* <--- Utilisez 100dvh à la place */
     padding: 40px 30px 40px;
     box-sizing: border-box;
     text-align: center;
